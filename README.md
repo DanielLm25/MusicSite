@@ -1,0 +1,2 @@
+# MusicSite
+ A Music Site with the idea of reproducing a web streaming of music reproduction, with windows of home, favorites, generes, with functionalites make in JavaScript as buttons, selectors. modification and exclusion of items. Furthermore, the style is manipulated in CSS for better user experience, with base color blue representing confidence, tranquility and it an  environment of leisure.
