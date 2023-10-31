@@ -202,3 +202,94 @@ i {
   .XF{
     color: #0055ff;
     font-size:24px}
+
+    .searchBar {
+      display: flex ;
+      align-items: center;
+      justify-content: space-evenly;  
+      background-color: #1f1c2c;
+      height: 90px;
+      border: none;
+      padding-left: 75px;
+   }
+  
+   #inputSearchBar{
+    background-color: #363641;
+    border-radius: 45px;
+    width: 610px;
+    height: 60px;
+    margin-top: 15px;
+    border: none;
+    padding-left: 22px;
+  }
+  
+  .buttonDiv {
+    display: flex;
+    
+  }
+
+  .userDiv {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    height: 55px;
+    width: 95px;
+    transition: border 0.1s;
+  }
+  
+  
+  
+  .User{
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    transition: transform 0.6s ease-in-out;
+  }
+  
+
+  .userInfo {
+    display: block; /* Comece com a display: block; para que o elemento seja visível inicialmente */
+    position: absolute;
+    left: -2.3px;
+    top: 100%;
+    border: 3px solid #CCC;
+    border-top: 0;
+    width: 95px;
+    border-radius: 0 0 8px 8px;
+    opacity: 0; /* Comece com a opacidade 0 (elemento invisível) */
+    transition: opacity 0.5s; /* Adicione uma transição para a opacidade */
+}
+  
+  .userInfo a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #1f1c2c;
+  }
+  
+  .userInfo a:hover {
+    background-color: #eee;
+  }
+
+  
+
+.profile {
+  color: #0055ff;
+  height: 45px;
+  width: 35px;
+  font-size: 45px;
+}
+
+.chevron{
+  font-size: 20px;
+  margin-left:10px ;
+  padding-left: 0px;
+}
+
+.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.6s ease-in-out;
+}

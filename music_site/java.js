@@ -124,3 +124,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
   plusTwo.innerHTML = '<i class="bx bxs-plus-circle plusIcon"></i>';
   plusTwo.classList.add('plusTwo');
+
+  const userButton = document.querySelector('.User');
+  const userInfo = document.querySelector('.userInfo');
+  const userDiv = document.querySelector('.userDiv');
+  const chevronIcon = document.getElementById('chevron');
+  
+  userButton.addEventListener('click', () => {
+  
+    userButton.classList.toggle('rotate');
+
+    if (userInfo.style.opacity === '0') {
+      userInfo.style.opacity = '1'; 
+      userDiv.style.border = '3px solid #ccc';
+      userDiv.style.borderBottom = '1px solid transparent';
+      userDiv.style.borderRadius = '8px 8px 0 0';// Torna .userInfo visível
+  } else {
+      userInfo.style.opacity = '0'; 
+      userDiv.style.border = '3px solid #ccc';
+      userDiv.style.borderRadius = '8px';// Torna .userInfo invisível
+  }
+});
+
+
+
+ 
+      
+
+
+      
