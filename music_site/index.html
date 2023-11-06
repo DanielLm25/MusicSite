@@ -43,23 +43,31 @@
             </div>
 
             <div class="lista3" id="lista3"></div>
+
           </nav>
     </header>
 
     <div class="searchBar">
-      <input type="text" id="inputSearchBar" placeholder="Pesquise o que deseja">
+      <input class="inputSearch" type="text" placeholder="Pesquise sua musica">
+
+    <div class="menu">
+      <div class="containerButton">
+      <button id="toggleMenu">
+        <i class='bx bx-chevron-down chevron' ></i>
+        <i class='bx bx-user-circle user'></i>
+      </button>
       
-      <div class="userDiv">
-        <div class="buttonDiv">
-        <button class="User"><i class='bx bx-chevron-down chevron' id="chevron"></i></button>
-        <i class='bx bx-user-circle profile'></i>
-      </div>
-        <div class="userInfo">
-          <a href="#">Profile</a class="UserInfo">
-          <a href="#">Accounts</a class="UserInfo">
-      </div>
-      </div>
+      <div class="containerMenu">
+      <ul id="menuContent">
+          <li><a href="#" class="menuItem">Settings</a></li>
+          <li><a href="#" class="menuItem">Profile</a></li>
+          <li><a href="#" class="menuItem">Accounts</a></li>
+      </ul>
     </div>
+  </div>
+  </div>
+</div>
+
 
 
 <script src="java.js"></script>

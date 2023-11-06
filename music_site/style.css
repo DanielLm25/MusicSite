@@ -199,97 +199,149 @@ i {
     margin-right: 18px;
   }
 
-  .XF{
-    color: #0055ff;
-    font-size:24px}
 
-    .searchBar {
-      display: flex ;
+   .searchBar{
+      background-color: #400a7e;
+      display: flex;
       align-items: center;
-      justify-content: space-evenly;  
-      background-color: #1f1c2c;
-      height: 90px;
-      border: none;
-      padding-left: 75px;
-   }
+      justify-content: space-around;
+      height: 60px;
+    }
+
+
+
+    .inputSearch{
+      margin-left: 90px;
+      width: 500px;
+      height: 40px;
+      border-radius: 20px;
+      border-color: transparent;
+      padding: 10px;
+      background-color:#643eb1;
+
   
-   #inputSearchBar{
-    background-color: #363641;
-    border-radius: 45px;
-    width: 610px;
-    height: 60px;
-    margin-top: 15px;
-    border: none;
-    padding-left: 22px;
-  }
-  
-  .buttonDiv {
-    display: flex;
+    }
+
+
+    .inputSearch::placeholder {
+      color: #ffffff; /* Substitua essa cor pela cor desejada */
+    }
+
+
+    .chevron{
+      margin: 0;
+    }
+
+    .user{
+      margin: 0;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     
+    
+    .containerButton{
+      position: relative;
+
+      
+    }
+
+    .containerButton i{
+      color: #0055ff;    
+      font-size: 40px;
+    }
+    
+    
+    #toggleMenu {
+      margin: 6px;
+      background-color: transparent;
+      border: 4px solid #fff;
+      cursor: pointer;
+      transition: border-width 0.1s, transform 0.3s;  
+      border-radius: 8px; 
+      margin-bottom: 2px;  
+      width: auto; 
+      
+    }
+
+    #toggleMenu i {
+      color: #0055ff;
+      font-size: 40px;
+      padding-left: 0px;
+    }
+
+
+
+      .containerMenu{
+        margin-left: 1.2px;
+        width: 86px;
+        position: absolute;
+        top: 100%;
+        opacity: 0;
+        border: 2px solid transparent;
+        border-top: none;
+        transition: opacity 0.3s, border-top 0.3s;
+        left: 5px; /* Adicione uma transição para transform, opacidade e a borda superior */
+      }
+
+      .menuItem{
+        padding: 0%;
+        display: flex;
+        align-items: center;
+      }
+
+      .menuItem:hover{
+        transform: scale(1.2);
+        transform-origin: center; /* Aumenta a escala do item em 10% ao passar o mouse por cima */
+        transition: transform 0.5s; /* Adiciona uma transição suave para o efeito de escala */
+        display: flex;
+        border: 5px solid transparent;
+        align-items: center;
+        margin-bottom: 10px;
+        background-color: transparent;
+        z-index: 1; /* Adiciona uma pilha de contexto superior para que ele fique sobreposto */
+      }
+
+      #menuContent{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+
+      #menuContent li a{
+        text-decoration: none;
+        color: #000;
+        width: 100%;
+
+      }
+
+      #menuContent li {
+        list-style: none;
+        text-align: left;
+      }
+
+
+      .menu.active #toggleMenu {
+        border-bottom:none;
+        border-radius: 8px 8px 0px 0px;
+        margin-bottom: 0px;
+    }
+    
+    
+    .menu.active .containerMenu {
+      opacity: 1; /* Faça o menu aparecer ajustando a opacidade */
+      transform: scaleY(1);
+      border-width: 4px;
+      border-radius: 0px 0px 8px 8px;
+      border-top: 0px;
+      border-color: #ffffff;
+      width: 91px;
+      top: 99%;
+      transition: opacity 0.3s, border-top 0.2s;
+
+       /* Restabeleça a largura da borda superior do menu */
   }
-
-  .userDiv {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-    height: 55px;
-    width: 95px;
-    transition: border 0.1s;
-  }
-  
-  
-  
-  .User{
-    display: flex ;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    transition: transform 0.6s ease-in-out;
-  }
-  
-
-  .userInfo {
-    display: block; /* Comece com a display: block; para que o elemento seja visível inicialmente */
-    position: absolute;
-    left: -2.3px;
-    top: 100%;
-    border: 3px solid #CCC;
-    border-top: 0;
-    width: 95px;
-    border-radius: 0 0 8px 8px;
-    opacity: 0; /* Comece com a opacidade 0 (elemento invisível) */
-    transition: opacity 0.5s; /* Adicione uma transição para a opacidade */
-}
-  
-  .userInfo a {
-    display: block;
-    padding: 10px;
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #1f1c2c;
-  }
-  
-  .userInfo a:hover {
-    background-color: #eee;
-  }
-
-  
-
-.profile {
-  color: #0055ff;
-  height: 45px;
-  width: 35px;
-  font-size: 45px;
-}
-
-.chevron{
-  font-size: 20px;
-  margin-left:10px ;
-  padding-left: 0px;
-}
-
-.rotate {
-  transform: rotate(180deg);
-  transition: transform 0.6s ease-in-out;
-}

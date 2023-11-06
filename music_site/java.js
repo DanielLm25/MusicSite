@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
     plusTwo.style.display = 'flex';
     playlistAdd.style.display = 'flex';
 
+    inputField.focus();
+
     if (deleteButtonSecond === null) {
       deleteButtonSecond = document.createElement('button');
 
@@ -70,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
   plusTwo.addEventListener('click', () => {
     const lista3 = document.getElementById('lista3');
     const newItemText = inputField.value;
+   
     if (newItemText.trim() !== '') {
       const newItemContainer = document.createElement('div'); // Crie uma div para envolver o item e o botão de delete
       newItemContainer.classList.add('itemContainer');
@@ -125,31 +128,11 @@ document.addEventListener('DOMContentLoaded', function() {
   plusTwo.innerHTML = '<i class="bx bxs-plus-circle plusIcon"></i>';
   plusTwo.classList.add('plusTwo');
 
-  const userButton = document.querySelector('.User');
-  const userInfo = document.querySelector('.userInfo');
-  const userDiv = document.querySelector('.userDiv');
-  const chevronIcon = document.getElementById('chevron');
-  
-  userButton.addEventListener('click', () => {
-  
-    userButton.classList.toggle('rotate');
 
-    if (userInfo.style.opacity === '0') {
-      userInfo.style.opacity = '1'; 
-      userDiv.style.border = '3px solid #ccc';
-      userDiv.style.borderBottom = '1px solid transparent';
-      userDiv.style.borderRadius = '8px 8px 0 0';// Torna .userInfo visível
-  } else {
-      userInfo.style.opacity = '0'; 
-      userDiv.style.border = '3px solid #ccc';
-      userDiv.style.borderRadius = '8px';// Torna .userInfo invisível
-  }
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOMContentLoaded event fired");
+    document.getElementById('toggleMenu').addEventListener('click', function() {
+        const menu = document.querySelector('.menu');
+        menu.classList.toggle('active');
+    });
 });
-
-
-
- 
-      
-
-
-      
