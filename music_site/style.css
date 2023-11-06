@@ -246,8 +246,16 @@ i {
 
     .chevron{
       margin: 0;
+        transition: transform 0.8s;
     }
 
+    .rotate {
+      transform: rotate(180deg);
+      transition: transform 0.8s;    
+    }
+
+    
+    
     .user{
       margin: 0;
     }
@@ -284,7 +292,7 @@ i {
     }
 
     #toggleMenu i {
-      color: #0055ff;
+      color: #ffffff;
       font-size: 40px;
       padding-left: 0px;
     }
@@ -300,7 +308,8 @@ i {
         border: 2px solid transparent;
         border-top: none;
         transition: opacity 0.3s, border-top 0.3s;
-        left: 5px; /* Adicione uma transição para transform, opacidade e a borda superior */
+        left: 5px;
+         /* Adicione uma transição para transform, opacidade e a borda superior */
       }
 
       .menuItem{
@@ -330,7 +339,7 @@ i {
 
       #menuContent li a{
         text-decoration: none;
-        color: #000;
+        color: #ffffff;
         width: 100%;
 
       }
@@ -357,7 +366,70 @@ i {
       border-color: #ffffff;
       width: 91px;
       top: 99%;
-      transition: opacity 0.3s, border-top 0.2s;
+      transition: opacity 0.3s, border-top 0.2s
 
        /* Restabeleça a largura da borda superior do menu */
+  }
+
+
+  .recentlyPlays{
+    padding-left: 320px;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #301666;
+  }
+
+  .recentlyPlays p{
+  display: flex;  
+  justify-content: space-around
+}
+
+  .recentlyPlaysTitle{
+    font-size: 30px;
+    margin: 0%;
+    padding-bottom: 30px;
+    padding-top: 20px;
+    padding-left: 0px;
+  }
+
+  .recentlyPlaysTop{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .recentlyPlaysTop a{
+    color: #fff;
+    padding: 0%;
+    padding-right: 20px;
+    margin: 0%;
+    width: 70px;
+  }
+
+
+  img{
+    height: 150px;
+    border-radius: 8px;
+  }
+
+  .musicTitle{
+    font-size: 15px;
+    color: #fff;
+    padding: 5px;
+  }
+
+  .musicGenre{
+    color: #ffffff83;
+    padding-bottom: 5px;
+  }
+
+  .Trendings{
+    background-color: #0055ff;
+    padding-left: 320px;
+    list-style: none;
+
   }

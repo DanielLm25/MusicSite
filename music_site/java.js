@@ -134,6 +134,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('toggleMenu').addEventListener('click', function() {
         const menu = document.querySelector('.menu');
         menu.classList.toggle('active');
+        const chevronIcon = document.getElementById('chevronIcon');
+        chevronIcon.classList.toggle('rotate');
+        
     });
 });
 
