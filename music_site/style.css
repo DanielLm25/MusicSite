@@ -200,33 +200,49 @@ i {
   }
 
 
-   .searchBar{
-      background-color: #400a7e;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      height: 60px;
-    }
-
-
-
-    .inputSearch{
-      margin-left: 90px;
-      width: 500px;
-      height: 40px;
-      border-radius: 20px;
-      border-color: transparent;
-      padding: 10px;
-      background-color:#643eb1;
-
+  .searchBar {
+    background-color: rgb(196, 142, 255);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 60px;
+  }
   
-    }
+  .inputBar {
+    margin-left: 90px;
+    position: relative;
+  }
+  
+  .inputSearch {
+    width: 500px;
+    height: 40px;
+    border-radius: 20px;
+    border-color: transparent;
+    padding: 10px;
+    background-color: #643eb1;
+    color: #fff;
+    padding-left: 30px; /* Ajuste o espaço à esquerda para acomodar o ícone */
+  }
+  
+  .inputSearch::placeholder {
+    color: #ffffff;
+  }
+  
+  i.search {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 20px;
+    transition: opacity 0.3s; /* Adiciona uma transição suave de 0.3 segundos para a propriedade de opacidade */
 
+  }
 
-    .inputSearch::placeholder {
-      color: #ffffff; /* Substitua essa cor pela cor desejada */
-    }
-
+  .search.hidden {
+    opacity: 0;
+    transition: opacity 0.3s; /* Adicione uma transição de 0.3 segundos para suavizar o desaparecimento */
+  }
 
     .chevron{
       margin: 0;

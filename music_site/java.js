@@ -136,3 +136,16 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.classList.toggle('active');
     });
 });
+
+const inputSearch = document.getElementsByClassName('inputSearch');
+const iconSearch = document.getElementsByClassName('search');
+
+for (let i = 0; i < inputSearch.length; i++) {
+  inputSearch[i].addEventListener('focus', function () {
+    iconSearch[i].classList.add('hidden');
+  });
+
+  inputSearch[i].addEventListener('blur', function () {
+    iconSearch[i].classList.remove('hidden');
+  });
+}
