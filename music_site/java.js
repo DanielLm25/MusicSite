@@ -72,62 +72,53 @@ document.addEventListener('DOMContentLoaded', function() {
   plusTwo.addEventListener('click', () => {
     const lista3 = document.getElementById('lista3');
     const newItemText = inputField.value;
-   
+  
     if (newItemText.trim() !== '') {
-      const newItemContainer = document.createElement('div'); // Crie uma div para envolver o item e o botão de delete
+      const newItemContainer = document.createElement('div');
       newItemContainer.classList.add('itemContainer');
-      
+  
       const newItem = document.createElement('a');
       const icon = document.createElement('i');
       icon.className = 'bx bxs-album';
-
-      
+  
       const deleteButton = document.createElement('button');
       const iconFour = document.createElement('i');
-      iconFour.className ='bx bxs-x-circle XF'; 
-
-      newItem.appendChild(deleteButton);
-      deleteButton.appendChild(iconFour)
-      deleteButton.classList.add('deleteButton');
-
+      iconFour.className = 'bx bxs-x-circle XF';
+  
       newItem.appendChild(icon);
       newItem.appendChild(document.createTextNode(newItemText));
-
-      
+  
+      deleteButton.appendChild(iconFour);
+      deleteButton.classList.add('deleteButton');
+  
       newItemContainer.appendChild(newItem);
       newItemContainer.appendChild(deleteButton);
-
+  
       inputField.style.display = 'none';
       plusTwo.style.display = 'none';
       deleteButtonSecond.style.display = 'none';
       deleteButtonSecond = null;
-
+  
       lista3.appendChild(newItemContainer);
       inputField.value = '';
-
-      
-
+  
       deleteButton.addEventListener('click', () => {
         lista3.removeChild(newItemContainer);
-        deleteButton.style.display = 'none';
       });
-
+  
       function selected_link(event) {
-        event.preventDefault(); // Impede o comportamento padrão do clique em links
-        const items = document.querySelectorAll('.selected'); // Seleciona todos os elementos com a classe .selected
-        items.forEach((item) => item.classList.remove('selected')); // Remove a classe .selected de todos os elementos com essa classe
-        this.classList.add('selected'); // Adiciona a classe .selected apenas ao item clicado
+        event.preventDefault();
+        const items = document.querySelectorAll('.selected');
+        items.forEach((item) => item.classList.remove('selected'));
+        this.classList.add('selected');
       }
-
-      lista3.appendChild(deleteButton);
-
+  
       newItem.addEventListener('mousedown', selected_link);
     }
   });
 
   plusTwo.innerHTML = '<i class="bx bxs-plus-circle plusIcon"></i>';
   plusTwo.classList.add('plusTwo');
-
 
   document.addEventListener("DOMContentLoaded", function() {
     console.log("DOMContentLoaded event fired");
@@ -152,3 +143,28 @@ for (let i = 0; i < inputSearch.length; i++) {
     iconSearch[i].classList.remove('hidden');
   });
 }
+const heartButton = document.querySelector('.heart');
+const hearthFillIcon = document.querySelector('.hearthFill');
+let isFillVisible = false;
+
+heartButton.addEventListener('click', function() {
+  if (isFillVisible) {
+    hearthFillIcon.style.display = 'none';
+  } else {
+    hearthFillIcon.style.display = 'block';
+  }
+  isFillVisible = !isFillVisible;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+

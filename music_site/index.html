@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Roboto+Condensed:wght@300&family=Roboto:wght@300;700&family=Varela+Round&display=swap" rel="stylesheet">
-    
-    
+
+
     <title>Music_site</title>
 
 
@@ -18,12 +18,12 @@
 <body>
     <header>
         <h1>Daniel Music</h1>
-        
+
         <nav>
             <div class="lista1">
-            
+
               <a class="" href="#"><i class='bx bx-home-alt'></i>Home </a>
-              <a class="" href="#"><i class='bx bx-menu'></i>Generes </a>
+              <a class="" href="#"><i class='bx bx-menu'></i>Genres </a>
               <a class="" href="#"><i class='bx bx-user-circle'></i>Artists</a>
               <a class="" href="#"><i class='bx bx-album' ></i>Albuns</a>
             </div>
@@ -36,14 +36,13 @@
                 <p class="playlist">Playlist</p>
                 <button class="plus_button" id="plus_button">+</button>
             </div>
-            
+
             <div id="playlistAdd">
               <input type="text" id="inputField" placeholder="Digite o nome da Playlist">
               <button id="plusTwo"> + </button>
             </div>
 
             <div class="lista3" id="lista3"></div>
-
           </nav>
     </header>
 
@@ -87,15 +86,61 @@
   <h1 class="TrendingTitle">Trending</h1>
   <ul class="TrendingsList">
     <img src="img/download.jpeg" alt="imagem de Tranding">
-    <li>
+    <li class="trendingItems">
       <p class="trendingMusicTitle">Classical</p>
       <p class="trendingMusicGenre">Tarrega</p>
     </li>
+    <div class="playTrandings">
+    <p class="time">3:29</p>
+    <button class="playTranding" ><i class='bx bx-play-circle playT'></i></button>
+  </div>
   </ul>
 </div>
 
+<div class="TopPlaylist">
+  <h1>Top Playlists for you</h1>
+  <div class="musicTop">
+    <img src="img/ab67616d0000b273aa597e50829169e6994eb403.jpeg" alt="iamgem de Recently Plays">
+    <div class="topItems">
+    <p class="playlistM">Enemy</p>
+    <p class="playlistG">Imagine Dragons</p>
+  </div>
+  </div>
+</div>
 
+<footer> 
+  <div class="Player">
+  <ul class="playP">
+      <img src="img/ab67616d0000b273aa597e50829169e6994eb403.jpeg" alt="iamgem de Recently Plays">
+      <li class="playPr">
+      <p class="PlayPre">Enemy</p>
+      <p class="playPres">Imagine Dragons</p>
+      </li>
+      <button class="heart">
+        <i class="heart-icon bx bx-heart Hearth"></i>
+        <i class='bx bxs-heart hearthFill' ></i>
+      </button>
+  </ul>
 
+  <div class="MainPlayerContainer">
+  <div class="PrincipalPlayer">
+    <button class="Random"><i class='bx bx-shuffle random'></i></button>
+    <button class="Back"><i class='bx bxs-chevron-left-circle back'></i></button>
+    <button class="Play"><i class='bx bx-play-circle play'></i></button>
+    <button class="Next"><i class='bx bxs-chevron-right-circle next'></i></button>
+    <button class="Looping"> <i class='bx bx-sync lopping'></i></button>
+  </div>
+  <div class="playBar">
+    <div id="progressBar"></div>
+  </div>
+</div>
+<div class="volumeControl">
+  <button class="volume"><i class='bx bx-volume-low' ></i></button>
+  <input type="range" id="volumeRange" min="0" max="100" value="50">
+</div>
+</div>
+</footer> 
+ 
 <script src="java.js"></script>
 
 </body>

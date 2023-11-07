@@ -1,3 +1,4 @@
+
 * {
   font-family: 'Roboto', sans-serif;
   padding: 0;
@@ -47,8 +48,28 @@ h1 {
 }
 
 .lista3 a i {
-  font-size: 24px; /* Defina um tamanho menor para o ícone */
+  font-size: 24px;
   margin-right: 10px; /* Adicione espaço entre o ícone e o texto */
+}
+
+.lista3 a{
+  align-items: center; /* Alinhe o ícone e o texto verticalmente */
+  text-decoration: none;
+  color: aliceblue;
+  font-size: 18px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+
+.lista3{
+  display: flex;
+  flex-direction: column;}
+
+.XF{
+  color: #0055ff;
+  font-size: 24px;
+  margin-left: 10px;
 }
 
 a {
@@ -150,7 +171,7 @@ i {
 
 
 .deleteButtonSecond{
-  
+
   width: 25px;
   padding-right: 32px;
   background-color: transparent;
@@ -177,13 +198,11 @@ i {
 ::placeholder {
   color: #a8a4f1}
 
-  .lista3{
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between
-  }
 
   .itemContainer{
+    display: flex;
+  justify-content: space-between;
+  align-items: baseline;
     margin: 0px;
     padding: 0px;
   }
@@ -199,6 +218,7 @@ i {
     margin-right: 18px;
   }
 
+  
 
   .searchBar {
     background-color: rgb(196, 142, 255);
@@ -254,8 +274,6 @@ i {
       transition: transform 0.8s;    
     }
 
-    
-    
     .user{
       margin: 0;
     }
@@ -390,7 +408,7 @@ i {
   .recentlyPlaysTitle{
     font-size: 30px;
     margin: 0%;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
     padding-top: 20px;
     padding-left: 0px;
   }
@@ -431,5 +449,218 @@ i {
     background-color: #0055ff;
     padding-left: 320px;
     list-style: none;
+    display: inline-block;
+    flex-direction: column;
+    width: 800px;
+    height: 421px;
+    
+  }
 
+  .Trendings h1{
+    margin: 0%;
+    font-size: 30px;
+    margin-top: 20px;
+    padding-bottom: 30px;
+  }    
+
+  .TrendingsList{
+    display: flex;
+    align-items: center;
+  }
+
+  .TrendingsList img{
+    height: 90px;
+    width: 90px;  
+}
+
+.TrendingsList p{
+  display: flex;
+  margin: 8px;
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.trendingItems{
+  display: flex;
+  flex-direction: column;
+}
+.time{
+  align-self: flex-end;
+  margin-top: 5px;
+}
+
+.playTrandings{
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  padding-left: 170px;
+}
+.playTranding{
+  background-color: transparent;
+  border: none;
+  margin: 0%; 
+  padding: 0%;
+}
+
+.playT{
+  color: #ffffff;
+  font-size: 25px;
+  margin: 0%;
+}
+
+.playT:hover{
+  cursor: pointer;
+}
+
+.TopPlaylist{
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 20px; /* Para alinhar os elementos verticalmente na parte superior */
+}
+
+.TopPlaylist h1{
+  color: #000000;
+  margin: 20px;
+  margin-left: 0px;
+  padding: 0%;
+  padding-bottom: 10px;
+  font-size: 30px;
+}
+
+.musicTop{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0%;
+  padding: 0%;
+}
+
+.topItems{
+  color: #000000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-left: 15px ;
+}
+
+
+  /* Estilos gerais do player de música */
+  .Player {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .playP {
+    display: flex;
+    align-items: center;
+    list-style: none;
+  }
+  
+  .playP img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+  }
+  
+  .playPr,
+  .PlayPre {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .PlayPre {
+    color: #888;
+  }
+  
+  .heart {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    position: relative;
+
+  }
+  
+  .heart-icon {
+    margin: 0; 
+    position: absolute;
+    top: 0;
+    left: 0;/* Remova a margem padrão do ícone */
+  }
+
+  .hearthFill {
+    display: none;
+  }
+  
+  .MainPlayerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .PrincipalPlayer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .PrincipalPlayer button {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  .playBar {
+    width: 100%;
+    height: 4px;
+    background-color: #666;
+  }
+  
+  #progressBar {
+    width: 50%;
+    height: 50%; /* Ajuste a altura conforme necessário */
+    background-color: #00f;
+  }
+  
+
+  .volumeControl {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Ajuste a margem conforme necessário */
+  }
+  
+  label {
+    margin-right: 10px;
+    color: #fff;
+  }
+  
+  input[type="range"] {
+    width: 100px; /* Largura do controle de volume */
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px; /* Altura do controle de volume */
+    background: #666; /* Cor de fundo do controle de volume */
+    border-radius: 5px;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px; /* Largura do polegar do controle de volume */
+    height: 10px; /* Altura do polegar do controle de volume */
+    background: #00f; /* Cor do polegar do controle de volume */
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+
+  .bx-heart-filled {
+    background-color: #0055ff;
   }
