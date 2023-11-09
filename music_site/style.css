@@ -1,3 +1,4 @@
+
 * {
   font-family: 'Roboto', sans-serif;
   padding: 0;
@@ -26,7 +27,7 @@ input:-webkit-autofill {
 header {
   overflow: auto;
   position: fixed;    
-  width: auto;
+  width: 100%px;
   height: 100%;
   background-color: rgb(0, 3, 54);
   display: inline-block;
@@ -47,8 +48,28 @@ h1 {
 }
 
 .lista3 a i {
-  font-size: 24px; /* Defina um tamanho menor para o ícone */
+  font-size: 24px;
   margin-right: 10px; /* Adicione espaço entre o ícone e o texto */
+}
+
+.lista3 a{
+  align-items: center; /* Alinhe o ícone e o texto verticalmente */
+  text-decoration: none;
+  color: aliceblue;
+  font-size: 18px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+
+.lista3{
+  display: flex;
+  flex-direction: column;}
+
+.XF{
+  color: #0055ff;
+  font-size: 24px;
+  margin-left: 10px;
 }
 
 a {
@@ -84,6 +105,7 @@ a.selected {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 200px;
 
 }
 
@@ -150,7 +172,7 @@ i {
 
 
 .deleteButtonSecond{
-  
+
   width: 25px;
   padding-right: 32px;
   background-color: transparent;
@@ -177,13 +199,11 @@ i {
 ::placeholder {
   color: #a8a4f1}
 
-  .lista3{
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between
-  }
 
   .itemContainer{
+    display: flex;
+  justify-content: space-between;
+  align-items: baseline;
     margin: 0px;
     padding: 0px;
   }
@@ -199,6 +219,499 @@ i {
     margin-right: 18px;
   }
 
-  .XF{
-    color: #0055ff;
-    font-size:24px}
+  
+
+  .searchBar {
+    background-color: rgb(196, 142, 255);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 60px;
+  }
+  
+  .inputBar {
+    margin-left: 90px;
+    position: relative;
+  }
+  
+  .inputSearch {
+    width: 500px;
+    height: 40px;
+    border-radius: 20px;
+    border-color: transparent;
+    padding: 10px;
+    background-color: #643eb1;
+    color: #fff;
+    padding-left: 30px; /* Ajuste o espaço à esquerda para acomodar o ícone */
+  }
+  
+  .inputSearch::placeholder {
+    color: #ffffff;
+  }
+  
+  i.search {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 20px;
+    transition: opacity 0.3s; /* Adiciona uma transição suave de 0.3 segundos para a propriedade de opacidade */
+
+  }
+
+  .search.hidden {
+    opacity: 0;
+    transition: opacity 0.3s; /* Adicione uma transição de 0.3 segundos para suavizar o desaparecimento */
+  }
+
+    .chevron{
+      margin: 0;
+        transition: transform 0.8s;
+    }
+
+    .rotate {
+      transform: rotate(180deg);
+      transition: transform 0.8s;    
+    }
+
+    .user{
+      margin: 0;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    
+    .containerButton{
+      position: relative;
+
+      
+    }
+
+    .containerButton i{
+      color: #0055ff;    
+      font-size: 40px;
+    }
+    
+    
+    #toggleMenu {
+      margin: 6px;
+      background-color: transparent;
+      border: 4px solid #fff;
+      cursor: pointer;
+      transition: border-width 0.1s, transform 0.3s;  
+      border-radius: 8px; 
+      margin-bottom: 2px;  
+      width: auto; 
+      
+    }
+
+    #toggleMenu i {
+      color: #ffffff;
+      font-size: 40px;
+      padding-left: 0px;
+    }
+
+
+
+      .containerMenu{
+        margin-left: 1.2px;
+        width: 86px;
+        position: absolute;
+        top: 100%;
+        opacity: 0;
+        border: 2px solid transparent;
+        border-top: none;
+        transition: opacity 0.3s, border-top 0.3s;
+        left: 5px;
+         /* Adicione uma transição para transform, opacidade e a borda superior */
+      }
+
+      .menuItem{
+        padding: 0%;
+        display: flex;
+        align-items: center;
+      }
+
+      .menuItem:hover{
+        transform: scale(1.2);
+        transform-origin: center; /* Aumenta a escala do item em 10% ao passar o mouse por cima */
+        transition: transform 0.5s; /* Adiciona uma transição suave para o efeito de escala */
+        display: flex;
+        border: 5px solid transparent;
+        align-items: center;
+        margin-bottom: 10px;
+        background-color: transparent;
+        z-index: 1; /* Adiciona uma pilha de contexto superior para que ele fique sobreposto */
+      }
+
+      #menuContent{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+
+      #menuContent li a{
+        text-decoration: none;
+        color: #ffffff;
+        width: 100%;
+
+      }
+
+      #menuContent li {
+        list-style: none;
+        text-align: left;
+      }
+
+
+      .menu.active #toggleMenu {
+        border-bottom:none;
+        border-radius: 8px 8px 0px 0px;
+        margin-bottom: 0px;
+    }
+    
+    
+    .menu.active .containerMenu {
+      opacity: 1; /* Faça o menu aparecer ajustando a opacidade */
+      transform: scaleY(1);
+      border-width: 4px;
+      border-radius: 0px 0px 8px 8px;
+      border-top: 0px;
+      border-color: #ffffff;
+      width: 91px;
+      top: 99%;
+      transition: opacity 0.3s, border-top 0.2s
+
+       /* Restabeleça a largura da borda superior do menu */
+  }
+
+
+  .recentlyPlays{
+    padding-left: 310px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #301666;
+  }
+
+  .recentlyPlays p{
+  display: flex;  
+  justify-content: space-around
+}
+
+  .recentlyPlaysTitle{
+    font-size: 25px;
+    margin: 0%;
+    padding-bottom: 25px;
+    padding-top: 20px;
+  }
+
+  .recentlyPlaysTop{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .recentlyPlaysTop a{
+    color: #fff;
+    padding: 0%;
+    padding-right: 20px;
+    margin: 0%;
+    width: 70px;
+  }
+
+
+  img{
+    height: 150px;
+    border-radius: 8px;
+  }
+
+  .musicTitle{
+    font-size: 15px;
+    color: #fff;
+    padding: 5px;
+  }
+
+  .musicGenre{
+    color: #ffffff83;
+    padding-bottom: 5px;
+  }
+
+  .Trendings{
+    background-color: #0055ff;
+    padding-left: 310px;
+    list-style: none;
+    display: inline-block;
+    flex-direction: column;
+    width: 800px;
+    height: 335px;
+    
+  }
+
+  .Trendings h1{
+    margin: 0%;
+    font-size: 25px;
+     padding: 5px;
+  }    
+
+  .TrendingsList{
+    display: flex;
+    align-items: center;
+    width: auto;
+  }
+
+  .TrendingsList img{
+    height: 60px;
+    width: 60px;  
+    padding: 5px;
+}
+
+.TrendingsList p{
+  display: flex;
+  margin: 4px;
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.trendingItems{
+  display: flex;
+  flex-direction: column;
+}
+.time{
+  align-self: flex-end;
+  margin-top: 5px;
+}
+
+.playTrandings{
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  padding-left: 180px;
+}
+.playTranding{
+  background-color: transparent;
+  border: none;
+  margin: 0%; 
+  padding: 0%;
+}
+
+.playT{
+  color: #ffffff;
+  font-size: 25px;
+  margin: 0%;
+}
+
+.playT:hover{
+  cursor: pointer;
+}
+
+.TopPlaylist {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 20px;
+  height: auto;
+}
+
+.TopPlaylist h1 {
+  color: #000000;
+  margin: 10px;
+  margin-left: 0;
+  padding: 0;
+  padding-bottom: 5px;
+  font-size: 25px;
+}
+
+.musicTop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alterado para flex-start */
+  margin: 0;
+  padding: 0;
+  height: 200px;
+}
+.topItems {
+  color: #000000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: 20px;
+  margin-top: 10px;
+  height: 300px; /* Adicionado para ajustar o espaçamento entre o título e os outros elementos */
+}
+
+.topItems img{
+  height: 200px; /* Adicionado para ajustar o espaçamento entre o título e os outros elementos */
+}
+
+  /* Estilos gerais do player de música */
+  .Player {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    padding-left: 210px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 87px;
+    bottom: 0%;
+  }
+  
+  .playP {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin-right: 80px;
+  }
+  
+  .playP img {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+  }
+  
+  .playPr,
+  .PlayPre {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .PlayPre {
+    color: #888;
+  }
+  
+  .heart{
+    background-color: transparent;
+    position: relative;
+    width: 40px; /* Ajuste conforme necessário */
+    height: 40px;
+    border: none;
+  }
+
+  .heart-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    font-size: 30px;
+  }
+
+  .hearthFill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    font-size: 30px;
+  }
+
+
+  .MainPlayerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 80px;
+  }
+  
+  .PrincipalPlayer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .PrincipalPlayer button {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  .playBar {
+    display: flex;
+    align-items: center;
+  }
+  
+  .progressContainer {
+    flex-grow: 1;
+    height: 4px;
+    background-color: #666;
+    margin: 0 10px;
+    position: relative;
+    width: 200px;
+  }
+  
+  #progressBar {
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(129, 134, 243, 0.937), rgb(19, 24, 107));
+    width: 0; /* Inicialmente a largura é 0 */
+    transition: width 0.1s ease; /* Adiciona uma transição suave */
+  }
+  
+  #currentTime,
+  #totalDuration {
+    font-size: 14px; /* Tamanho da fonte */
+    margin: 0 8px; /* Margens para espaçamento */
+    color: #ffffff; /* Cor do texto */
+  }
+  .volumeContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .volumeIcon {
+    background-color:transparent; /* Cor de fundo do ícone de volume */
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  .volumeIcon i{
+    font-size: 25px;
+    transform: translate(15px);
+  }
+  
+  /* Estilos adicionais para o slider-container */
+  .slider-container {
+    margin-left: 10px; /* Ajuste a margem conforme necessário */
+  }
+  
+  .slider-fill {
+    height: 100%;
+    background-color: #496fbc; /* Cor do preenchimento da barra */
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .custom-slider {
+    width: 150px; /* Largura do controle deslizante */
+    height: 10px;
+    background-color: #ddd; /* Cor de fundo da barra */
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .slider-thumb {
+    width: 16px;
+    height: 16px;
+    background-color: #0055ff; /* Cor do "polegar" */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+
+
+  
