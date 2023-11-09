@@ -143,28 +143,185 @@ for (let i = 0; i < inputSearch.length; i++) {
     iconSearch[i].classList.remove('hidden');
   });
 }
+
 const heartButton = document.querySelector('.heart');
 const hearthFillIcon = document.querySelector('.hearthFill');
-let isFillVisible = false;
+const hearthPrincipal = document.querySelector('.bx-heart');
+
+// Inicia a página com o ícone hearthPrincipal visível e hearthFillIcon oculto
+hearthFillIcon.style.display = 'none';
+hearthPrincipal.style.display = 'flex';
 
 heartButton.addEventListener('click', function() {
-  if (isFillVisible) {
-    hearthFillIcon.style.display = 'none';
+  // Alternar a visibilidade dos ícones ao clicar no botão
+  if (hearthFillIcon.style.display === 'none') {
+    hearthFillIcon.style.display = 'flex';
+    hearthPrincipal.style.display = 'none';
   } else {
-    hearthFillIcon.style.display = 'block';
+    hearthFillIcon.style.display = 'none';
+    hearthPrincipal.style.display = 'flex';
   }
-  isFillVisible = !isFillVisible;
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+  var volumeSlider = document.getElementById('volumeSlider');
+  var sliderThumb = document.getElementById('sliderThumb');
+  var sliderFill = document.getElementById('sliderFill');
+  var volumeIcon = document.querySelector('.volumeIcon i');
 
+  // Defina o valor inicial para 50%
+  volumeSlider.value = 50;
+  var percent = volumeSlider.value / 100;
+  setSliderPosition(percent);
+  updateVolumeIcon(percent);
 
+  volumeSlider.addEventListener('mousedown', startDragging);
 
+  function startDragging(e) {
+    e.preventDefault();
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDragging);
+  }
 
+  function stopDragging() {
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', stopDragging);
+  }
 
+  function drag(e) {
+    var percent = calculatePercent(e);
+    setSliderPosition(percent);
+    updateVolumeIcon(percent);
 
+    // Ajuste o volume do áudio durante o arraste
+    var volumeValue = percent;
+    audioPlayer.volume = volumeValue;
+  }
 
+  function calculatePercent(e) {
+    var sliderRect = volumeSlider.getBoundingClientRect();
+    var offsetX = e.clientX - sliderRect.left;
+    var percent = offsetX / sliderRect.width;
+    return Math.max(0, Math.min(1, percent)); // Garante que percent esteja entre 0 e 1
+  }
 
+  function setSliderPosition(percent) {
+    var thumbPosition = percent * 100;
+    sliderThumb.style.left = thumbPosition + '%';
 
+    // Atualizar o preenchimento da barra
+    sliderFill.style.width = thumbPosition + '%';
 
+    // Atualizar o valor do slider
+    volumeSlider.value = percent * 100;
+  }
+
+  function updateVolumeIcon(percent) {
+    var volumeIconClass = getVolumeIconClass(percent);
+    volumeIcon.className = `bx ${volumeIconClass} volume-icon`;
+  }
+
+  function getVolumeIconClass(percent) {
+    if (percent === 0) {
+      return 'bx bx-volume-mute';
+    } else if (percent > 0 && percent <= 0.5) {
+      return 'bx bx-volume-low';
+    } else {
+      return 'bx bx-volume-full';
+    }
+  }
+
+  // Adicione esta parte para chamar a função toggleMute no clique do ícone do botão
+  volumeIcon.addEventListener('click', toggleMute);
+
+  // Defina isMuted como falso inicialmente
+  var isMuted = false;
+
+  function toggleMute() {
+    isMuted = !isMuted;
+
+    if (isMuted) {
+      volumeSlider.value = 0;
+    } else {
+      volumeSlider.value = 100; // Defina o valor inicial para 50%
+    }
+
+    var percent = volumeSlider.value / 100;
+    setSliderPosition(percent);
+    updateVolumeIcon(percent);
+
+    // Ajuste o volume do áudio ao clicar no ícone de volume
+    var volumeValue = percent;
+    audioPlayer.volume = volumeValue;
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const audioPlayer = document.getElementById('audioPlayer');
+  const playButton = document.querySelector('.Play');
+
+  playButton.addEventListener('click', () => {
+    if (audioPlayer.paused) {
+      audioPlayer.play();
+      playButton.innerHTML = '<i class="bx bx-pause-circle"></i>'; 
+    } else {
+      audioPlayer.pause();
+      playButton.innerHTML = '<i class="bx bx-play-circle" ></i>'; 
+    }
+  });
+});;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const audioPlayer = document.getElementById('audioPlayer');
+  const progressBar = document.getElementById('progressBar');
+  const currentTimeSpan = document.getElementById('currentTime');
+  const totalDurationSpan = document.getElementById('totalDuration');
+
+  audioPlayer.addEventListener('timeupdate', () => {
+    const currentTime = audioPlayer.currentTime;
+    const duration = audioPlayer.duration;
+
+    // Atualiza o tempo atual
+    currentTimeSpan.textContent = formatTime(currentTime);
+
+    // Atualiza a duração total (se disponível)
+    if (!isNaN(duration)) {
+      totalDurationSpan.textContent = formatTime(duration);
+    }
+
+    const progressPercentage = (currentTime / duration) * 100;
+
+    // Atualiza a largura da progressBar
+    progressBar.style.width = `${progressPercentage}%`;
+  });
+
+  // Função para formatar o tempo em minutos e segundos
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const audioPlayer = document.getElementById('audioPlayer');
+  const progressContainer = document.querySelector('.progressContainer');
+  const progressBar = document.getElementById('progressBar');
+
+  progressContainer.addEventListener('click', (event) => {
+    const boundingRect = progressContainer.getBoundingClientRect();
+    const clickX = event.clientX - boundingRect.left;
+    const progressContainerWidth = boundingRect.width;
+
+    const progressPercentage = (clickX / progressContainerWidth) * 100;
+
+    // Move a barra preenchida para a posição clicada
+    progressBar.style.width = `${progressPercentage}%`;
+
+    // Atualiza a reprodução da música a partir do ponto clicado
+    const duration = audioPlayer.duration || 0;
+    const seekTime = (progressPercentage / 100) * duration;
+    audioPlayer.currentTime = seekTime;
+  });
+});
 
 

@@ -100,8 +100,8 @@
 <div class="TopPlaylist">
   <h1>Top Playlists for you</h1>
   <div class="musicTop">
-    <img src="img/ab67616d0000b273aa597e50829169e6994eb403.jpeg" alt="iamgem de Recently Plays">
     <div class="topItems">
+      <img src="/music_site/img/ab67616d0000b273f8fa082806184fcb032d8e0a.jpeg" alt="imagem de Recently Plays">
     <p class="playlistM">Enemy</p>
     <p class="playlistG">Imagine Dragons</p>
   </div>
@@ -110,35 +110,53 @@
 
 <footer> 
   <div class="Player">
-  <ul class="playP">
-      <img src="img/ab67616d0000b273aa597e50829169e6994eb403.jpeg" alt="iamgem de Recently Plays">
-      <li class="playPr">
-      <p class="PlayPre">Enemy</p>
-      <p class="playPres">Imagine Dragons</p>
-      </li>
-      <button class="heart">
-        <i class="heart-icon bx bx-heart Hearth"></i>
-        <i class='bx bxs-heart hearthFill' ></i>
-      </button>
-  </ul>
-
-  <div class="MainPlayerContainer">
-  <div class="PrincipalPlayer">
-    <button class="Random"><i class='bx bx-shuffle random'></i></button>
-    <button class="Back"><i class='bx bxs-chevron-left-circle back'></i></button>
-    <button class="Play"><i class='bx bx-play-circle play'></i></button>
-    <button class="Next"><i class='bx bxs-chevron-right-circle next'></i></button>
-    <button class="Looping"> <i class='bx bx-sync lopping'></i></button>
+    <div class="left-section">
+      <ul class="playP">
+        <img src="img/ab67616d0000b273aa597e50829169e6994eb403.jpeg" alt="imagem de Recently Plays">
+        <li class="playPr">
+          <p class="PlayPre">Enemy</p>
+          <p class="playPres">Imagine Dragons</p>
+        </li>
+        <button class="heart">
+          <i class="heart-icon bx bx-heart"></i>
+          <i class='bx bxs-heart hearthFill'></i>
+        </button>
+      </ul>
+    </div>
+    <div class="center-section">
+      <audio id="audioPlayer" class="audioPlayer">
+        <source src="music/Legends Never Die (ft. Against The Current) _ Worlds 2017 - League of Legends_r6zIGXun57U.mp3" type="audio/mp3">
+      </audio>
+      <div class="MainPlayerContainer">
+        <div class="PrincipalPlayer">
+          <button class="Random"><i class='bx bx-shuffle random'></i></button>
+          <button class="Back"><i class='bx bxs-chevron-left-circle back'></i></button>
+          <button class="Play"><i class='bx bx-play-circle play'></i></button>
+          <button class="Next"><i class='bx bxs-chevron-right-circle next'></i></button>
+          <button class="Looping"> <i class='bx bx-sync lopping'></i></button>
+        </div>
+        <div class="playBar">
+          <span id="currentTime">0:00</span>
+          <div class="progressContainer">
+            <div id="progressBar"></div>
+          </div>
+          <span id="totalDuration">0:00</span>
+        </div>
+      </div>
+    </div>
+    <div class="right-section">
+      <div class="volumeContainer">
+        <button class="volumeIcon"><i class='bx bx-volume-low'></i></button>
+        <div class="slider-container">
+          <div class="custom-slider" id="volumeSlider">
+            <div class="slider-fill" id="sliderFill"></div>
+            <div class="slider-thumb" id="sliderThumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="playBar">
-    <div id="progressBar"></div>
-  </div>
-</div>
-<div class="volumeControl">
-  <button class="volume"><i class='bx bx-volume-low' ></i></button>
-  <input type="range" id="volumeRange" min="0" max="100" value="50">
-</div>
-</div>
+  
 </footer> 
  
 <script src="java.js"></script>
