@@ -6,23 +6,28 @@
   box-sizing: border-box;
 }
 
+body{
+  background-image: linear-gradient(to right, rgba(36, 42, 156, 0.99), rgba(6, 9, 95, 0.995));
+}
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 }
 
 ::-webkit-scrollbar {
-  width: 3px; /* Largura da barra de rolagem */
+  width: 3px; 
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0055ff; /* Cor do indicador da barra de rolagem */
-  border-radius: 6px; /* Cantos arredondados do indicador */
+  background: #0055ff; 
+  border-radius: 6px; 
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* Cor de fundo da barra de rolagem */
+  background: transparent; 
 }
 
+/*-------------------------------------------------------SIDE BAR-------------------------------------------------------*/
 
 header {
   overflow: auto;
@@ -31,6 +36,7 @@ header {
   height: 100%;
   background-color: rgb(0, 3, 54);
   display: inline-block;
+  z-index: 1;
 }
 
 h1 {
@@ -49,11 +55,11 @@ h1 {
 
 .lista3 a i {
   font-size: 24px;
-  margin-right: 10px; /* Adicione espaço entre o ícone e o texto */
+  margin-right: 10px;
 }
 
 .lista3 a{
-  align-items: center; /* Alinhe o ícone e o texto verticalmente */
+  align-items: center; 
   text-decoration: none;
   color: aliceblue;
   font-size: 18px;
@@ -154,7 +160,7 @@ i {
   border-radius: 10px;
   border: 4px solid #0055ff;
   height: 30px;
-  background-image: linear-gradient(to right, rgba(0, 3, 54, 0.937), rgb(19, 24, 107));
+  background-image: linear-gradient(to right, rgba(0, 3, 54, 0.937), #13186b);
 }
 
 
@@ -219,10 +225,10 @@ i {
     margin-right: 18px;
   }
 
-  
+  /*-------------------------------------------------------TOP BAR----------------------------------------------------------------------*/
 
   .searchBar {
-    background-color: rgb(196, 142, 255);
+    background-image: linear-gradient(to right, rgba(36, 42, 156, 0.99), rgba(6, 9, 95, 0.995));
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -240,9 +246,9 @@ i {
     border-radius: 20px;
     border-color: transparent;
     padding: 10px;
-    background-color: #643eb1;
-    color: #fff;
-    padding-left: 30px; /* Ajuste o espaço à esquerda para acomodar o ícone */
+    background-color: #1e0059;
+    color: #ffffff;
+    padding-left: 30px; 
   }
   
   .inputSearch::placeholder {
@@ -256,13 +262,13 @@ i {
     transform: translateY(-50%);
     color: #fff;
     font-size: 20px;
-    transition: opacity 0.3s; /* Adiciona uma transição suave de 0.3 segundos para a propriedade de opacidade */
+    transition: opacity 0.3s; 
 
   }
 
   .search.hidden {
     opacity: 0;
-    transition: opacity 0.3s; /* Adicione uma transição de 0.3 segundos para suavizar o desaparecimento */
+    transition: opacity 0.3s; 
   }
 
     .chevron{
@@ -328,7 +334,6 @@ i {
         border-top: none;
         transition: opacity 0.3s, border-top 0.3s;
         left: 5px;
-         /* Adicione uma transição para transform, opacidade e a borda superior */
       }
 
       .menuItem{
@@ -339,14 +344,14 @@ i {
 
       .menuItem:hover{
         transform: scale(1.2);
-        transform-origin: center; /* Aumenta a escala do item em 10% ao passar o mouse por cima */
-        transition: transform 0.5s; /* Adiciona uma transição suave para o efeito de escala */
+        transform-origin: center; 
+        transition: transform 0.5s; 
         display: flex;
         border: 5px solid transparent;
         align-items: center;
         margin-bottom: 10px;
         background-color: transparent;
-        z-index: 1; /* Adiciona uma pilha de contexto superior para que ele fique sobreposto */
+        z-index: 1; 
       }
 
       #menuContent{
@@ -377,7 +382,7 @@ i {
     
     
     .menu.active .containerMenu {
-      opacity: 1; /* Faça o menu aparecer ajustando a opacidade */
+      opacity: 1; 
       transform: scaleY(1);
       border-width: 4px;
       border-radius: 0px 0px 8px 8px;
@@ -386,9 +391,14 @@ i {
       width: 91px;
       top: 99%;
       transition: opacity 0.3s, border-top 0.2s
-
-       /* Restabeleça a largura da borda superior do menu */
   }
+
+
+
+
+
+  /*------------------------------------------------------RECENTLY PLAYS----------------------------------------------------------------------*/
+
 
 
   .recentlyPlays{
@@ -397,7 +407,7 @@ i {
     align-items: flex-start;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #301666;
+    background-image: linear-gradient(to right, rgba(36, 42, 156, 0.99), rgba(6, 9, 95, 0.995));
   }
 
   .recentlyPlays p{
@@ -435,17 +445,24 @@ i {
 
   .musicTitle{
     font-size: 15px;
-    color: #fff;
+    color: #fffffff8;
     padding: 5px;
   }
 
   .musicGenre{
-    color: #ffffff83;
+    color: rgba(209, 209, 209, 0.996);
     padding-bottom: 5px;
   }
 
+
+
+
+  /*-------------------------------------------------------TRENDINGS----------------------------------------------------------------------*/
+
+
+
   .Trendings{
-    background-color: #0055ff;
+    background-image: linear-gradient(to right, rgba(36, 42, 156, 0), rgba(6, 9, 95, 0));   
     padding-left: 310px;
     list-style: none;
     display: inline-block;
@@ -478,6 +495,7 @@ i {
   margin: 4px;
   margin-left: 10px;
   font-size: 15px;
+  color: #fff;
 }
 
 .trendingItems{
@@ -512,6 +530,10 @@ i {
   cursor: pointer;
 }
 
+
+  /*-------------------------------------------------------TOP PLAYLIST----------------------------------------------------------------------*/
+
+
 .TopPlaylist {
   display: inline-block;
   vertical-align: top;
@@ -520,7 +542,7 @@ i {
 }
 
 .TopPlaylist h1 {
-  color: #000000;
+  color: #ffffff;
   margin: 10px;
   margin-left: 0;
   padding: 0;
@@ -531,28 +553,41 @@ i {
 .musicTop {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alterado para flex-start */
+  align-items: flex-start; 
   margin: 0;
   padding: 0;
   height: 200px;
 }
 .topItems {
-  color: #000000;
+  color: #fdfdfd;
   display: flex;
   align-items: center;
   flex-direction: column;
   font-size: 20px;
   margin-top: 10px;
-  height: 300px; /* Adicionado para ajustar o espaçamento entre o título e os outros elementos */
+  height: 300px; 
 }
 
 .topItems img{
-  height: 200px; /* Adicionado para ajustar o espaçamento entre o título e os outros elementos */
+  height: 200px; 
 }
 
-  /* Estilos gerais do player de música */
+.playlistG{
+  color: rgba(209, 209, 209, 0.996);;
+}
+
+
+
+
+  /*-------------------------------------------------------PLAYER (IMG)----------------------------------------------------------------------*/
+
+
   .Player {
-    background-color: #333;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-image: linear-gradient(to right, rgba(42, 43, 68, 0.99), rgba(0, 2, 48, 0.995));
     color: #fff;
     display: flex;
     padding-left: 210px;
@@ -560,8 +595,9 @@ i {
     align-items: center;
     justify-content: space-evenly;
     height: 87px;
-    bottom: 0%;
-  }
+    backdrop-filter: blur(800px); /* Aplicando o efeito de borramento ao background */
+}
+
   
   .playP {
     display: flex;
@@ -589,7 +625,7 @@ i {
   .heart{
     background-color: transparent;
     position: relative;
-    width: 40px; /* Ajuste conforme necessário */
+    width: 40px; 
     height: 40px;
     border: none;
   }
@@ -611,6 +647,9 @@ i {
     display: flex;
     font-size: 30px;
   }
+
+
+    /*------------------------------------------------------- PLAYER ----------------------------------------------------------------------*/
 
 
   .MainPlayerContainer {
@@ -650,24 +689,30 @@ i {
   
   #progressBar {
     height: 100%;
-    background-image: linear-gradient(to right, rgba(129, 134, 243, 0.937), rgb(19, 24, 107));
-    width: 0; /* Inicialmente a largura é 0 */
-    transition: width 0.1s ease; /* Adiciona uma transição suave */
+    background-image: linear-gradient(to right, rgba(81, 88, 215, 0.937), rgb(99, 107, 246));
+    width: 0; 
+    transition: width 0.1s ease; 
   }
   
   #currentTime,
   #totalDuration {
-    font-size: 14px; /* Tamanho da fonte */
-    margin: 0 8px; /* Margens para espaçamento */
-    color: #ffffff; /* Cor do texto */
+    font-size: 14px;
+    margin: 0 8px; 
+    color: #ffffff;
   }
+
+
+
+  /*-------------------------------------------------------PLAYER (VOLUME)----------------------------------------------------------------------*/
+
+
   .volumeContainer {
     display: flex;
     align-items: center;
   }
   
   .volumeIcon {
-    background-color:transparent; /* Cor de fundo do ícone de volume */
+    background-color:transparent; 
     border: none;
     border-radius: 50%;
     padding: 5px;
@@ -679,14 +724,14 @@ i {
     transform: translate(15px);
   }
   
-  /* Estilos adicionais para o slider-container */
+  
   .slider-container {
-    margin-left: 10px; /* Ajuste a margem conforme necessário */
+    margin-left: 10px; 
   }
   
   .slider-fill {
     height: 100%;
-    background-color: #496fbc; /* Cor do preenchimento da barra */
+    background-color: #3f03f3; 
     border-radius: 5px;
     position: absolute;
     top: 0;
@@ -694,9 +739,9 @@ i {
   }
   
   .custom-slider {
-    width: 150px; /* Largura do controle deslizante */
+    width: 150px; 
     height: 10px;
-    background-color: #ddd; /* Cor de fundo da barra */
+    background-color: rgba(190, 162, 255, 0.437); 
     border-radius: 5px;
     position: relative;
     cursor: pointer;
@@ -705,7 +750,7 @@ i {
   .slider-thumb {
     width: 16px;
     height: 16px;
-    background-color: #0055ff; /* Cor do "polegar" */
+    background-color: rgb(79, 63, 251); 
     border-radius: 50%;
     position: absolute;
     top: 50%;
