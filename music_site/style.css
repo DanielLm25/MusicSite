@@ -588,7 +588,7 @@ i {
     left: 0;
     width: 100%;
     background-image: linear-gradient(to right, rgba(42, 43, 68, 0.99), rgba(0, 2, 48, 0.995));
-    color: #fff;
+    color: #a8a6a6;
     display: flex;
     padding-left: 210px;
     flex-direction: row;
@@ -619,7 +619,7 @@ i {
   }
   
   .PlayPre {
-    color: #888;
+    color: #fdfdfd;
   }
   
   .heart{
