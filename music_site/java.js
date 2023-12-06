@@ -133,6 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const inputSearch = document.getElementsByClassName('inputSearch');
 const iconSearch = document.getElementsByClassName('search');
+const searchResults = document.querySelector('.searchResults');
+
+// Adicione um ouvinte de evento de clique ao documento
+document.addEventListener('click', function (event) {
+  const isClickInsideInput = Array.from(inputSearch).some(input => input.contains(event.target));
+  const isClickInsideResults = searchResults.contains(event.target);
+
+  // Se o clique não foi dentro do input ou dos resultados, limpe os resultados e os inputs
+  if (!isClickInsideInput && !isClickInsideResults) {
+    limparResultados();
+    Array.from(inputSearch).forEach(input => {
+      input.value = ''; // ou input.value = null; para definir como null
+    });
+  }
+});
 
 for (let i = 0; i < inputSearch.length; i++) {
   inputSearch[i].addEventListener('focus', function () {
@@ -142,7 +157,42 @@ for (let i = 0; i < inputSearch.length; i++) {
   inputSearch[i].addEventListener('blur', function () {
     iconSearch[i].classList.remove('hidden');
   });
+
+  inputSearch[i].addEventListener('input', function () {
+    const searchTerm = inputSearch[i].value;
+
+    if (searchTerm.trim() !== '') {
+      buscarResultadosAPI(searchTerm);
+    } else {
+      limparResultados();
+    }
+  });
 }
+
+function buscarResultadosAPI(searchTerm) {
+  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchTerm)}&type=track&limit=10`;
+  const token = 'SEU_TOKEN_DO_SPOTIFY';
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  };
+
+  fetch(url, config)
+    .then(response => response.json())
+    .then(data => {
+      renderizarDadosNaTela(data);
+    })
+    .catch(error => {
+      console.error('Erro ao buscar resultados da API:', error);
+    });
+}
+
+function limparResultados() {
+  // Limpe os resultados na tela
+  searchResults.innerHTML = '';
+}
+
 
 const heartButton = document.querySelector('.heart');
 const hearthFillIcon = document.querySelector('.hearthFill');
@@ -325,3 +375,100 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+
+
+
+
+
+const client_id = 'f3e70e3bf6a343008d27a1272470b523';
+const client_secret = '9a8548093fb045aeaa9c4b4e98eea799';
+
+function getToken() {
+  const authOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + btoa(`${client_id}:${client_secret}`)
+    },
+    body: 'grant_type=client_credentials'
+  };
+
+  return fetch('https://accounts.spotify.com/api/token', authOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erro ao obter token de acesso');
+      }
+      return response.json();
+    })
+    .then(data => data.access_token)
+    .catch(error => {
+      console.error('Erro:', error.message);
+    });
+}
+
+function searchSpotify(token, query) {
+  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=album%2Cartist%2Cplaylist%2Ctrack%2Cshow%2Cepisode%2Caudiobook&limit=20&offset=0`;
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+
+  return fetch(url, { method: 'GET', headers: headers })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Resposta da API Spotify:', data);
+      renderizarDadosNaTela(data);
+    })
+    .catch(error => {
+      console.error('Erro ao fazer a requisição:', error.message);
+    });
+}
+
+function renderizarDadosNaTela(data) {
+  const searchResultsContainer = document.querySelector('.searchResults');
+
+  if (!searchResultsContainer) {
+    console.error('Erro: Elemento searchResults não encontrado.');
+    return;
+  }
+
+  // Limpe o conteúdo atual
+  searchResultsContainer.innerHTML = '';
+
+  // Itere sobre os itens retornados pela API e adicione-os à barra de pesquisa
+  data.tracks.items.forEach(item => {
+    const resultItem = document.createElement('div');
+    resultItem.className = 'result-item';
+
+    // Adicione os detalhes do item (ajuste conforme necessário)
+    resultItem.innerHTML = `<p>${item.name} - ${item.artists[0].name}</p>`;
+
+    // Adicione um evento de clique para preencher automaticamente a barra de pesquisa
+    resultItem.addEventListener('click', () => {
+      const inputSearch = document.querySelector('.inputSearch');
+
+      if (inputSearch) {
+        inputSearch.value = `${item.name} - ${item.artists[0].name}`;
+        searchResultsContainer.innerHTML = ''; // Limpe os resultados após a seleção
+      } else {
+        console.error('Erro: Elemento inputSearch não encontrado.');
+      }
+    });
+
+    searchResultsContainer.appendChild(resultItem);
+    console.log('Adicionando resultado ao contêiner:', resultItem);
+  });
+}
+
+// Adicione um ouvinte de eventos para a entrada de pesquisa
+document.querySelector('.inputSearch').addEventListener('input', (event) => {
+  const query = event.target.value;
+  
+  // Obtenha o token e execute a pesquisa quando o usuário digita
+  getToken().then(token => searchSpotify(token, query));
+});

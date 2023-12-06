@@ -16,6 +16,7 @@
 </head>
 
 <body>
+
     <header>
         <h1>Daniel Music</h1>
 
@@ -50,7 +51,10 @@
       <div class="inputBar">
         <i class='bx bx-search search'></i>
         <input class="inputSearch" type="text" placeholder="Pesquise sua música">
-      </div>
+        <div class="searchResults">
+        </div> <!-- Adicione um elemento próximo para os resultados -->
+  </div>
+     
 
     <div class="menu">
       <div class="containerButton">
@@ -70,16 +74,12 @@
   </div>
 </div>
 
-<div class="recentlyPlays">
+<div class="recentlyPlays" id="recentlyPlaysContainer">
   <div class="recentlyPlaysTop">
-  <h1 class="recentlyPlaysTitle">Recently Plays</h1>
-  <a>See all</a>
-</div>
-  <div class="musicEntry">
-    <img src="img/R-4826114-1376702296-8131.jpg" alt="imagem de Recently Plays">
-    <p class="musicTitle">Gregorian Cant</p>
-    <p class="musicGenre">Catholic</p>
+      <h1 class="recentlyPlaysTitle">Recently Plays</h1>
+      <a href="#" id="seeAllLink">See all</a>
   </div>
+  <div class="recentlyPlayedTracks" id="recentlyPlayedTracksContainer"></div>
 </div>
 
 <div class="Trendings">
@@ -101,7 +101,7 @@
   <h1>Top Playlists for you</h1>
   <div class="musicTop">
     <div class="topItems">
-      <img src="/img/ab67616d0000b273f8fa082806184fcb032d8e0a.jpeg" alt="imagem de Recently Plays">
+      <img src="img/ab67616d0000b273f8fa082806184fcb032d8e0a.jpeg" alt="imagem de Recently Plays">
     <p class="playlistM">Warriors</p>
     <p class="playlistG">Imagine Dragons</p>
   </div>
