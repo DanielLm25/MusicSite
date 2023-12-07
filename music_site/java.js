@@ -134,22 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
 const inputSearch = document.getElementsByClassName('inputSearch');
 const iconSearch = document.getElementsByClassName('search');
 const searchResults = document.querySelector('.searchResults');
-const token = 'BQDhhP2cpbzfNTqCfSl4FBx0a6i6QJS-MhYXRcC82zoATQDKyyHH6rimCxyZi3zzJkYWsUs7JY34Pp-TBwAhUlZSuaMzfcGcgPd1b9WH-vQANb77t3A';
 
 // Adicione um ouvinte de evento de clique ao documento
-document.addEventListener('click', function (event) {
-  const isClickInsideInput = Array.from(inputSearch).some(input => input.contains(event.target));
-  const isClickInsideResults = searchResults.contains(event.target);
-
-  // Se o clique não foi dentro do input ou dos resultados, limpe os resultados e os inputs
-  if (!isClickInsideInput && !isClickInsideResults) {
-    limparResultados();
-    Array.from(inputSearch).forEach(input => {
-      input.value = ''; // ou input.value = null; para definir como null
-    });
-  }
-});
-
 for (let i = 0; i < inputSearch.length; i++) {
   inputSearch[i].addEventListener('focus', function () {
     iconSearch[i].classList.add('hidden');
@@ -157,52 +143,7 @@ for (let i = 0; i < inputSearch.length; i++) {
 
   inputSearch[i].addEventListener('blur', function () {
     iconSearch[i].classList.remove('hidden');
-  });
-
-  inputSearch[i].addEventListener('input', function () {
-    const searchTerm = inputSearch[i].value;
-
-    if (searchTerm.trim() !== '') {
-      buscarResultadosAPI(searchTerm);
-    } else {
-      limparResultados();
-    }
-  });
-}
-
-function buscarResultadosAPI(searchTerm) {
-  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchTerm)}&type=track&limit=10`;
-  const token = 'BQDhhP2cpbzfNTqCfSl4FBx0a6i6QJS-MhYXRcC82zoATQDKyyHH6rimCxyZi3zzJkYWsUs7JY34Pp-TBwAhUlZSuaMzfcGcgPd1b9WH-vQANb77t3A';
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  };
-
-  fetch(url, config)
-    .then(response => response.json())
-    .then(data => {
-      renderizarDadosNaTela(data);
-    })
-    .catch(error => {
-      console.error('Erro ao buscar resultados da API:', error);
-    });
-}
-
-function limparResultados() {
-  const searchResults = document.querySelector('.searchResults');
-  
-  searchResults.innerHTML = '';
-  
-  Array.from(inputSearch).forEach(input => {
-    input.value = '';
-  });
-  
-  searchResults.style.display = 'block';
-  console.clear();
-  console.log(token);
-}
-
+  });}
 
 const heartButton = document.querySelector('.heart');
 const hearthFillIcon = document.querySelector('.hearthFill');
@@ -399,147 +340,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+const clientId = 'f3e70e3bf6a343008d27a1272470b523';
+const clientSecret = '9a8548093fb045aeaa9c4b4e98eea799';
+const tokenEndpoint = 'https://accounts.spotify.com/api/token';
+const scope = 'user-read-recently-played';
+const redirectUri = 'http://localhost:3000';
 
-
-
-
-
-
-
-
-const clientId = 'f3e70e3bf6a343008d27a1272470b523'; // Substitua pelo seu ID de cliente
-const clientSecret = '9a8548093fb045aeaa9c4b4e98eea799'; // Substitua pelo seu segredo de cliente
-
-const authOptions = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'Basic ' + btoa(`${clientId}:${clientSecret}`)
-  },
-  body: 'grant_type=client_credentials'
-};
-
-// Obter token de acesso
-fetch('https://accounts.spotify.com/api/token', authOptions)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Erro ao obter token de acesso');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Token de acesso:', data.access_token);
-    // Salvar token de acesso onde necessário
-
-    // Exemplo de como chamar a função para obter um novo token usando o refresh token
-    // getRefreshToken(data.refresh_token);
-  })
-  .catch(error => {
-    console.error('Erro ao obter token de acesso:', error.message);
-  });
-
-// Função para obter um novo token usando o refresh token
-const getRefreshToken = async (refreshToken) => {
-  const url = "https://accounts.spotify.com/api/token";
+const getToken = async () => {
+  const url = `${tokenEndpoint}?grant_type=client_credentials&scope=${scope}`;
 
   const payload = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-      client_id: clientId,
-      client_secret: clientSecret
-    }),
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
+    }
   };
-
   try {
     const response = await fetch(url, payload);
-    const responseData = await response.json();
-    
-    // Atualizar o token de acesso e o refresh token onde necessário
-    console.log('Novo Token de Acesso:', responseData.access_token);
-    console.log('Novo Refresh Token:', responseData.refresh_token);
-  } catch (error) {
-    console.error('Erro ao obter novo token:', error.message);
-  }
-};
-
-const accessToken = 'BQDhhP2cpbzfNTqCfSl4FBx0a6i6QJS-MhYXRcC82zoATQDKyyHH6rimCxyZi3zzJkYWsUs7JY34Pp-TBwAhUlZSuaMzfcGcgPd1b9WH-vQANb77t3A'; // Substitua pelo seu token de acesso
-
-const searchQuery = 'remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis';
-const market = 'BR';
-const limit = 20;
-const offset = 0;
-
-const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchQuery)}&type=album%2Cartist%2Cplaylist%2Ctrack%2Cshow%2Cepisode%2Caudiobook&market=${market}&limit=${limit}&offset=${offset}`;
-
-const headers = {
-  'Authorization': `Bearer ${accessToken}`
-};
-
-fetch(url, { method: 'GET', headers: headers })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+    const data = await response.json();
+    console.log(data); // Exibe os dados retornados no console
+    if (data.access_token) {
+      localStorage.setItem('access_token', data.access_token);
+      // Chame sua função que depende do token de acesso aqui
+      fazerSolicitacaoRecentementeReproduzida();
     }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Resposta da API Spotify:', data);
-    // Faça o que quiser com os dados aqui
-  })
-  .catch(error => {
-    console.error('Erro ao fazer a requisição:', error.message);
-  });
-
-
-  function buscarResultadosAPI(searchTerm) {
-    const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchTerm)}&type=track&limit=10`;
-    const token = 'BQDhhP2cpbzfNTqCfSl4FBx0a6i6QJS-MhYXRcC82zoATQDKyyHH6rimCxyZi3zzJkYWsUs7JY34Pp-TBwAhUlZSuaMzfcGcgPd1b9WH-vQANb77t3A'; // Substitua pelo seu token de acesso
-  
-    const headers = {
-      'Authorization': `Bearer ${token}`
-    };
-  
-    fetch(url, { method: 'GET', headers: headers })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Resultados da API Spotify:', data);
-  
-        // Exibir os resultados na barra de pesquisa
-        exibirResultados(data.tracks.items);
-      })
-      .catch(error => {
-        console.error('Erro ao fazer a requisição:', error.message);
-      });
+  } catch (error) {
+    console.error('Erro ao obter o token:', error);
   }
-  
-  // Função para exibir os resultados na barra de pesquisa
-  function exibirResultados(items) {
-    const searchResults = document.querySelector('.searchResults');
-    searchResults.innerHTML = ''; // Limpa os resultados anteriores
-  
-    items.forEach(item => {
-      const resultItem = document.createElement('div');
-      resultItem.textContent = item.name; // Altere para exibir os dados que deseja
-      resultItem.classList.add('search-item'); // Adiciona uma classe para estilização
-  
-      resultItem.addEventListener('click', () => {
-        // Ação ao clicar em um resultado (por exemplo, adicionar à lista de reprodução)
-        console.log('Clicou em:', item.name);
-  
-        // Limpa a barra de pesquisa após o clique no item
-        limparResultados();
-      });
-  
-      searchResults.appendChild(resultItem);
+};
+
+// Chama a função getToken inicialmente
+getToken();
+
+// Define um temporizador para atualizar o token a cada 55 minutos
+setInterval(() => {
+  getToken();
+}, 55 * 60 * 1000);
+
+
+const fazerSolicitacaoSpotify = async () => {
+  const token = localStorage.getItem('access_token');
+  const url = 'https://api.spotify.com/v1/search?q=remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=album%2Cartist%2Cplaylist%2Ctrack%2Cshow%2Cepisode%2Caudiobook&market=BR&limit=20&offset=0';
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
+
+    const data = await response.json();
+    console.log(data); // Exibe os dados da resposta no console
+    // Faça algo com os dados da resposta aqui
+  } catch (error) {
+    console.error('Erro na solicitação à API do Spotify:', error);
   }
+};
+
+fazerSolicitacaoSpotify();
+
+const fazerSolicitacaoRecentementeReproduzida = async () => {
+  const token = localStorage.getItem('access_token');
+  const url = 'https://api.spotify.com/v1/me/player/recently-played';
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const data = await response.json();
+    console.log(data); // Exibe os dados da resposta no console
+    // Faça algo com os dados da resposta aqui
+  } catch (error) {
+    console.error('Erro na solicitação das faixas recentemente reproduzidas:', error);
+  }
+};
