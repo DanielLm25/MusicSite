@@ -773,3 +773,13 @@ i {
     padding: 5px;
     cursor: pointer;
   }
+
+  .search-item:hover {
+    cursor: pointer; /* Altera o cursor do mouse para indicar que é clicável */
+    background-color: #f0f0f0; /* Altere para a cor desejada ao passar o mouse */
+  }
+  
+  /* Estilo para quando o item é clicado */
+  .search-item:active {
+    background-color: #d0d0d0; /* Altere para a cor desejada quando clicado */
+  }
