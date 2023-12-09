@@ -348,12 +348,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+let accessToken = null;
+const clientId = 'f3e70e3bf6a343008d27a1272470b523';
+const redirectUri = 'http://127.0.0.1:5500/music_site/index.html';
+const scope = 'user-read-private user-read-email'; // Escopo de permissão necessário
 
-
-const clientId = 'f3e70e3bf6a343008d27a1272470b523'; // Seu Client ID do Spotify
-const redirectUri = 'http://127.0.0.1:5500/music_site/index.html'; // Sua URI de redirecionamento
-
-// Função para iniciar o processo de autenticação
 const iniciarAutenticacaoSpotify = async () => {
   const generateRandomString = (length) => {
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -385,7 +384,7 @@ const iniciarAutenticacaoSpotify = async () => {
   const params = {
     response_type: 'code',
     client_id: clientId,
-    scope: 'user-read-private user-read-email',
+    scope: 'user-read-private user-read-email user-read-recently-played',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
@@ -396,4 +395,159 @@ const iniciarAutenticacaoSpotify = async () => {
 };
 
 
-document.getElementById('authButton').addEventListener('click', iniciarAutenticacaoSpotify);
+
+const getClientCredentialsToken = async () => {
+  const tokenEndpoint = 'https://accounts.spotify.com/api/token';
+  const clientSecret = '9a8548093fb045aeaa9c4b4e98eea799';
+
+  const basicAuth = btoa(`${clientId}:${clientSecret}`);
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': `Basic ${basicAuth}`,
+  };
+
+  const params = {
+    grant_type: 'client_credentials', // Grant type para credenciais do cliente
+  };
+
+  const formData = new URLSearchParams(params).toString();
+
+  try {
+    const response = await fetch(tokenEndpoint, {
+      method: 'POST',
+      headers: headers,
+      body: formData,
+    });
+
+    const data = await response.json();
+    accessToken = data.access_token; // Armazenar o token de acesso
+    console.log('Token de acesso obtido1:', accessToken);
+  } catch (error) {
+    console.error('Erro ao obter o token de acesso:', error);
+  }
+};
+
+const exchangeCodeForToken = async (code) => {
+  const codeVerifier = window.localStorage.getItem('code_verifier');
+  const tokenEndpoint = 'https://accounts.spotify.com/api/token';
+
+  const params = {
+    grant_type: 'authorization_code',
+    code: code,
+    redirect_uri: redirectUri,
+    client_id: clientId,
+    code_verifier: codeVerifier,
+  };
+
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  const formData = Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+
+  try {
+    const response = await fetch(tokenEndpoint, {
+      method: 'POST',
+      headers: headers,
+      body: formData,
+    });
+
+    const data = await response.json();
+    accessToken = data.access_token; // Armazenar o token de acesso
+    console.log('Token de acesso obtido 2:', accessToken);
+
+    // Após obter o token, chamar a função para buscar músicas recentemente reproduzidas
+    await getRecentlyPlayed(accessToken);
+
+    return data;
+  } catch (error) {
+    console.error('Erro ao trocar código por token:', error);
+  }
+};
+
+const getRecentlyPlayed = async (token) => {
+  const apiUrl = 'https://api.spotify.com/v1/me/player/recently-played';
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data); // Lidar com os dados das músicas recentemente tocadas
+    } else {
+      console.error('Erro na solicitação:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+  }
+};
+
+/// Função para iniciar a autenticação ao clicar no botão
+const iniciarAutenticacao = () => {
+  iniciarAutenticacaoSpotify();
+};
+
+// Adicionando evento de clique ao botão
+const authButton = document.getElementById('authButton');
+authButton.addEventListener('click', iniciarAutenticacao);
+
+// Verificar se há um código na URL ao carregar a página
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+
+  if (code) {
+    // Se há um código na URL, trocar por token
+    await exchangeCodeForToken(code);
+  } else {
+    // Se não há código, verificar se já existe um token
+    const existingToken = localStorage.getItem('access_token');
+    if (existingToken) {
+      accessToken = existingToken;
+      await getRecentlyPlayed(accessToken);
+    } else {
+      // Se não há token, iniciar a autenticação ao carregar a página
+      iniciarAutenticacaoSpotify();
+    }
+  }
+};
+
+
+const searchSpotify = async () => {
+  if (!accessToken) {
+    // Se não houver um token, obtenha um primeiro
+    await getClientCredentialsToken();
+  }
+
+  const apiUrl = 'https://api.spotify.com/v1/search';
+  const query = 'q=remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=album%2Cartist%2Cplaylist%2Ctrack%2Cshow%2Cepisode%2Caudiobook&market=BR&offset=0';
+
+  try {
+    const response = await fetch(`${apiUrl}?${query}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data); // Lidar com os dados da resposta da API
+    } else {
+      console.error('Erro na solicitação:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+  }
+};
+
+// Chamada inicial para buscar informações do Spotify
+searchSpotify();
+``
