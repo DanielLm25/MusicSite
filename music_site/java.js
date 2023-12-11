@@ -384,7 +384,7 @@ const iniciarAutenticacaoSpotify = async () => {
   const params = {
     response_type: 'code',
     client_id: clientId,
-    scope: 'user-read-private user-read-email user-read-recently-played',
+    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
@@ -460,6 +460,8 @@ const exchangeCodeForToken = async (code) => {
 
     // Após obter o token, chamar a função para buscar músicas recentemente reproduzidas
     await getRecentlyPlayed(accessToken);
+    await getTopTracks(accessToken);
+    await getPlaylists(accessToken);
 
     return data;
   } catch (error) {
@@ -489,7 +491,61 @@ const getRecentlyPlayed = async (token) => {
   }
 };
 
-/// Função para iniciar a autenticação ao clicar no botão
+const getTopTracks = async (token) => {
+  const apiUrl = 'https://api.spotify.com/v1/me/top/tracks?limit=5';
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Resposta de getTopTracks:', data); // Exibir os dados da resposta da API
+    } else {
+      console.error('Erro na solicitação de getTopTracks:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação de getTopTracks:', error);
+  }
+};
+
+
+const getPlaylists = async (token) => {
+  const apiUrl = 'https://api.spotify.com/v1/me/playlists?limit=3&offset=0';
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Resposta de getPlaylists:', data); // Exibir os dados da resposta da API
+    } else {
+      console.error('Erro na solicitação de getPlaylists:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação de getPlaylists:', error);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 const iniciarAutenticacao = () => {
   iniciarAutenticacaoSpotify();
 };
@@ -512,6 +568,11 @@ window.onload = async () => {
     if (existingToken) {
       accessToken = existingToken;
       await getRecentlyPlayed(accessToken);
+      await getTopTracks(accessToken);
+      await getPlaylists(accessToken);
+    
+
+
     } else {
       // Se não há token, iniciar a autenticação ao carregar a página
       iniciarAutenticacaoSpotify();
@@ -551,3 +612,8 @@ const searchSpotify = async () => {
 // Chamada inicial para buscar informações do Spotify
 searchSpotify();
 ``
+
+
+
+
+
