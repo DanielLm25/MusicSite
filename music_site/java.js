@@ -347,7 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
 let accessToken = null;
 const clientId = 'f3e70e3bf6a343008d27a1272470b523';
 const redirectUri = 'http://127.0.0.1:5500/music_site/index.html';
@@ -384,7 +383,7 @@ const iniciarAutenticacaoSpotify = async () => {
   const params = {
     response_type: 'code',
     client_id: clientId,
-    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private',
+    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
@@ -397,34 +396,38 @@ const iniciarAutenticacaoSpotify = async () => {
 
 
 const getClientCredentialsToken = async () => {
-  const tokenEndpoint = 'https://accounts.spotify.com/api/token';
-  const clientSecret = '9a8548093fb045aeaa9c4b4e98eea799';
+  if (!accessToken) {
+    const tokenEndpoint = 'https://accounts.spotify.com/api/token';
+    const clientSecret = '9a8548093fb045aeaa9c4b4e98eea799';
+    const basicAuth = btoa(`${clientId}:${clientSecret}`);
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Basic ${basicAuth}`,
+    };
 
-  const basicAuth = btoa(`${clientId}:${clientSecret}`);
-  const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': `Basic ${basicAuth}`,
-  };
+    const params = {
+      grant_type: 'client_credentials',
+    };
 
-  const params = {
-    grant_type: 'client_credentials', // Grant type para credenciais do cliente
-  };
+    const formData = new URLSearchParams(params).toString();
 
-  const formData = new URLSearchParams(params).toString();
+    try {
+      const response = await fetch(tokenEndpoint, {
+        method: 'POST',
+        headers: headers,
+        body: formData,
+      });
 
-  try {
-    const response = await fetch(tokenEndpoint, {
-      method: 'POST',
-      headers: headers,
-      body: formData,
-    });
-
-    const data = await response.json();
-    accessToken = data.access_token; // Armazenar o token de acesso
-    console.log('Token de acesso obtido1:', accessToken);
-  } catch (error) {
-    console.error('Erro ao obter o token de acesso:', error);
+      const data = await response.json();
+      accessToken = data.access_token;
+      console.log('Token de acesso obtido:', accessToken);
+    } catch (error) {
+      console.error('Erro ao obter o token de acesso:', error);
+      return accessToken;
+    }
   }
+
+  return accessToken; // Retorna o token de acesso existente ou recém-obtido
 };
 
 const exchangeCodeForToken = async (code) => {
@@ -582,10 +585,8 @@ window.onload = async () => {
 
 
 const searchSpotify = async () => {
-  if (!accessToken) {
-    // Se não houver um token, obtenha um primeiro
-    await getClientCredentialsToken();
-  }
+  const token = await getClientCredentialsToken(); // Obtém o token de acesso
+
 
   const apiUrl = 'https://api.spotify.com/v1/search';
   const query = 'q=remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=album%2Cartist%2Cplaylist%2Ctrack%2Cshow%2Cepisode%2Caudiobook&market=BR&offset=0';
@@ -594,7 +595,7 @@ const searchSpotify = async () => {
     const response = await fetch(`${apiUrl}?${query}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${token}`,
       },
     });
 
@@ -610,10 +611,47 @@ const searchSpotify = async () => {
 };
 
 // Chamada inicial para buscar informações do Spotify
-searchSpotify();
-``
 
 
+const getCurrentlyPlaying = async () => {
+  const token = await getClientCredentialsToken(); // Obtém o token de acesso
 
+  if (token) {
+    const apiUrl = 'https://api.spotify.com/v1/me/player/currently-playing';
+    const params = new URLSearchParams({
+      market: 'BR,US', // Adicione os mercados desejados separados por vírgula
+    });
 
+    try {
+      const response = await fetch(`${apiUrl}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data); // Lidar com os dados da resposta da API
+      } else {
+        console.error('Erro na solicitação:', response.status);
+      }
+    } catch (error) {
+      console.error('Erro na solicitação:', error);
+    }
+  } else {
+    console.error('Não foi possível obter o token de acesso.');
+  }
+};
+
+// Chamada para buscar a faixa de reprodução atual em múltiplos mercados
+const main = async () => {
+  await getClientCredentialsToken(); // Chama para garantir que o token esteja definido
+
+  // Chama as funções após o token ser obtido
+  getCurrentlyPlaying();
+  searchSpotify();
+};
+
+// Chama a função principal
+main();
