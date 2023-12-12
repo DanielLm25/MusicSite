@@ -131,20 +131,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-const inputSearch = document.getElementsByClassName('inputSearch');
-const iconSearch = document.getElementsByClassName('search');
-const searchResults = document.querySelector('.searchResults');
 
-// Adicione um ouvinte de evento de clique ao documento
-for (let i = 0; i < inputSearch.length; i++) {
-  inputSearch[i].addEventListener('focus', function () {
-    iconSearch[i].classList.add('hidden');
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const inputSearch = document.querySelector('.inputSearch');
+  const searchResultsDiv = document.querySelector('.searchResults'); // Obtém a div onde os resultados serão exibidos
+  const iconSearch = document.querySelectorAll('.search'); // Use querySelectorAll para obter todos os elementos com a classe '.search'
+
+  inputSearch.addEventListener('focus', function () {
+    iconSearch.forEach((icon) => {
+      icon.classList.add('hidden');
+    });
   });
 
-  inputSearch[i].addEventListener('blur', function () {
-    iconSearch[i].classList.remove('hidden');
-  });}
+  inputSearch.addEventListener('blur', function () {
+    iconSearch.forEach((icon) => {
+      icon.classList.remove('hidden');
+    });
+  });
+  inputSearch.addEventListener('input', async (event) => {
+    const searchTerm = event.target.value; // Obtém o termo de pesquisa do campo de entrada
+    await searchSpotify(searchTerm); // Chama a função de pesquisa do Spotify com o termo de pesquisa fornecido pelo usuário
+  });
 
+  document.addEventListener('click', (event) => {
+    const inputSearch = document.querySelector('.inputSearch'); // Supondo que o campo de entrada tenha a classe '.inputSearch'
+    const clickedElement = event.target;
+  
+    // Verifica se o clique foi fora da barra de pesquisa e limpa o valor do campo de entrada
+    if (!inputSearch.contains(clickedElement)) {
+      inputSearch.value = '';
+      searchResultsDiv.style.display = 'none'; // Limpa o valor da barra de pesquisa
+    }
+  });
+
+inputSearch.addEventListener('input', () => {
+  const searchTerm = inputSearch.value.trim(); // Obtém o termo de pesquisa do campo de entrada
+
+  if (searchTerm) {
+    searchResultsDiv.style.display = 'block'; // Torna a div de resultados visível quando há um termo de pesquisa
+  } else {
+    searchResultsDiv.style.display = 'none'; // Oculta a div de resultados quando não há termo de pesquisa
+  }
+});
+
+    
 const heartButton = document.querySelector('.heart');
 const hearthFillIcon = document.querySelector('.hearthFill');
 const hearthPrincipal = document.querySelector('.bx-heart');
@@ -383,7 +418,7 @@ const iniciarAutenticacaoSpotify = async () => {
   const params = {
     response_type: 'code',
     client_id: clientId,
-    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing',
+    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing ',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
@@ -584,12 +619,11 @@ window.onload = async () => {
 };
 
 
-const searchSpotify = async () => {
+const searchSpotify = async (searchTerm) => {
   const token = await getClientCredentialsToken(); // Obtém o token de acesso
 
-
   const apiUrl = 'https://api.spotify.com/v1/search';
-  const query = 'q=remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=album%2Cartist%2Cplaylist%2Ctrack%2Cshow%2Cepisode%2Caudiobook&market=BR&offset=0';
+  const query = `q=${encodeURIComponent(searchTerm)}&type=track&market=BR&offset=0`; // Atualiza a consulta com o termo de pesquisa dinâmico
 
   try {
     const response = await fetch(`${apiUrl}?${query}`, {
@@ -601,7 +635,7 @@ const searchSpotify = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data); // Lidar com os dados da resposta da API
+      displayResults(data); // Chama a função para exibir os resultados na página
     } else {
       console.error('Erro na solicitação:', response.status);
     }
@@ -610,6 +644,22 @@ const searchSpotify = async () => {
   }
 };
 
+const displayResults = (data) => {
+  const searchResultsDiv = document.querySelector('.searchResults'); // Obtém a div onde os resultados serão exibidos
+
+  if (data && data.tracks && data.tracks.items && data.tracks.items.length > 0) {
+    searchResultsDiv.innerHTML = ''; // Limpa a div de resultados
+
+    data.tracks.items.forEach(item => {
+      const resultItem = document.createElement('p');
+      resultItem.textContent = item.name; // Exemplo: exibindo apenas o nome da música
+
+      searchResultsDiv.appendChild(resultItem); // Adiciona o resultado à div de resultados
+    });
+  } else {
+    searchResultsDiv.innerHTML = '<p>Nenhum resultado encontrado.</p>'; // Exibe mensagem de nenhum resultado
+  }
+};
 // Chamada inicial para buscar informações do Spotify
 
 
@@ -655,3 +705,4 @@ const main = async () => {
 
 // Chama a função principal
 main();
+});
