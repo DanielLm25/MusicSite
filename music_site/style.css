@@ -763,8 +763,8 @@ i {
     position: absolute;
     width: 100%;
     height: 200px; /* Ajuste conforme necessário */
-    overflow-y: auto;
-    background-color: #fff;
+    overflow-x:hidden;
+    background-color:transparent;
     color: #0055ff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: none;    }

@@ -418,7 +418,7 @@ const iniciarAutenticacaoSpotify = async () => {
   const params = {
     response_type: 'code',
     client_id: clientId,
-    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing ',
+    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing user-modify-playback-state ',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
@@ -623,8 +623,7 @@ const searchSpotify = async (searchTerm) => {
   const token = await getClientCredentialsToken(); // Obtém o token de acesso
 
   const apiUrl = 'https://api.spotify.com/v1/search';
-  const query = `q=${encodeURIComponent(searchTerm)}&type=track&market=BR&offset=0`; // Atualiza a consulta com o termo de pesquisa dinâmico
-
+  const query = `q=${encodeURIComponent(searchTerm)}&type=album,artist,playlist,track,show,episode,audiobook&market=BR&limit=20&offset=0`;
   try {
     const response = await fetch(`${apiUrl}?${query}`, {
       method: 'GET',
@@ -635,7 +634,8 @@ const searchSpotify = async (searchTerm) => {
 
     if (response.ok) {
       const data = await response.json();
-      displayResults(data); // Chama a função para exibir os resultados na página
+      displayResults(data);
+      console.log(data); // Chama a função para exibir os resultados na página
     } else {
       console.error('Erro na solicitação:', response.status);
     }
@@ -647,12 +647,17 @@ const searchSpotify = async (searchTerm) => {
 const displayResults = (data) => {
   const searchResultsDiv = document.querySelector('.searchResults'); // Obtém a div onde os resultados serão exibidos
 
-  if (data && data.tracks && data.tracks.items && data.tracks.items.length > 0) {
+  if (data && data.artists && data.artists.items && data.artists.items.length > 0) {
     searchResultsDiv.innerHTML = ''; // Limpa a div de resultados
 
-    data.tracks.items.forEach(item => {
-      const resultItem = document.createElement('p');
-      resultItem.textContent = item.name; // Exemplo: exibindo apenas o nome da música
+    data.artists.items.forEach(item => {
+      const resultItem = document.createElement('a');
+      resultItem.textContent = item.name;
+      resultItem.href = '#';
+      
+      resultItem.addEventListener('click', () => {
+        console.log(item.name);
+      });
 
       searchResultsDiv.appendChild(resultItem); // Adiciona o resultado à div de resultados
     });
