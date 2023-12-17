@@ -381,11 +381,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
+let player;
 let accessToken = null;
 const clientId = 'f3e70e3bf6a343008d27a1272470b523';
 const redirectUri = 'http://127.0.0.1:5500/music_site/index.html';
-const scope = 'user-read-private user-read-email'; // Escopo de permissão necessário
 
 const iniciarAutenticacaoSpotify = async () => {
   const generateRandomString = (length) => {
@@ -453,12 +452,16 @@ const getClientCredentialsToken = async () => {
         body: formData,
       });
 
-      const data = await response.json();
-      accessToken = data.access_token;
-      console.log('Token de acesso obtido:', accessToken);
+      if (response.ok) {
+        const data = await response.json();
+        accessToken = data.access_token;
+        console.log('Token de acesso obtido:', accessToken);
+      } else {
+        throw new Error('Falha ao obter o token de acesso');
+      }
     } catch (error) {
       console.error('Erro ao obter o token de acesso:', error);
-      return accessToken;
+      return null; // Retornar null em caso de erro
     }
   }
 
@@ -481,9 +484,7 @@ const exchangeCodeForToken = async (code) => {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  const formData = Object.entries(params)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&');
+  const formData = new URLSearchParams(params).toString();
 
   try {
     const response = await fetch(tokenEndpoint, {
@@ -492,20 +493,29 @@ const exchangeCodeForToken = async (code) => {
       body: formData,
     });
 
-    const data = await response.json();
-    accessToken = data.access_token; // Armazenar o token de acesso
-    console.log('Token de acesso obtido 2:', accessToken);
+    if (response.ok) {
+      const data = await response.json();
+      accessToken = data.access_token; // Armazenar o token de acesso
+      localStorage.setItem('access_token', accessToken); // Salvar o token no localStorage
+      console.log('Token de acesso obtido2:', accessToken);
 
-    // Após obter o token, chamar a função para buscar músicas recentemente reproduzidas
-    await getRecentlyPlayed(accessToken);
-    await getTopTracks(accessToken);
-    await getPlaylists(accessToken);
+      // Após obter o token, chamar a função para buscar músicas recentemente reproduzidas
+      await getRecentlyPlayed(accessToken);
+      await getTopTracks(accessToken);
+      await getPlaylists(accessToken);
 
-    return data;
+      onSpotifyWebPlaybackSDKReady();
+
+      return data;
+    } else {
+      throw new Error('Falha ao trocar código por token');
+    }
   } catch (error) {
     console.error('Erro ao trocar código por token:', error);
   }
 };
+
+
 
 const getRecentlyPlayed = async (token) => {
   const apiUrl = 'https://api.spotify.com/v1/me/player/recently-played';
@@ -608,7 +618,7 @@ window.onload = async () => {
       await getRecentlyPlayed(accessToken);
       await getTopTracks(accessToken);
       await getPlaylists(accessToken);
-    
+      await onSpotifyWebPlaybackSDKReady(accessToken);
 
 
     } else {
@@ -619,44 +629,113 @@ window.onload = async () => {
 };
 
 
-const searchSpotify = async (searchTerm) => {
-  const token = await getClientCredentialsToken(); // Obtém o token de acesso
+const searchSpotify = async (token, searchTerm) => {
+  if (token) {
+    const apiUrl = 'https://api.spotify.com/v1/search';
+    const query = `q=${encodeURIComponent(searchTerm)}&type=album,artist,playlist,track,show,episode,audiobook&market=BR&limit=20&offset=0`;
+    try {
+      const response = await fetch(`${apiUrl}?${query}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-  const apiUrl = 'https://api.spotify.com/v1/search';
-  const query = `q=${encodeURIComponent(searchTerm)}&type=album,artist,playlist,track,show,episode,audiobook&market=BR&limit=20&offset=0`;
-  try {
-    const response = await fetch(`${apiUrl}?${query}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+      if (response.ok) {
+        const data = await response.json();
+        displayResults(data);
+        console.log(data); // Chama a função para exibir os resultados na página
+      } else {
+        console.error('Erro na solicitação:', response.status);
+      }
+    } catch (error) {
+      console.error('Erro na solicitação:', error);
+    }
+  } else {
+    console.error('Token de acesso ausente.');
+  }
+};
+
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+  player = new Spotify.Player({
+    name: 'Web Playback SDK Player',
+    getOAuthToken: cb => { cb(accessToken); }
+  });
+
+  console.log('Player inicializado:', player);
+
+
+  player.addListener('ready', ({ device_id }) => {
+    console.log('The Web Playback SDK is ready to play music!');
+    console.log('Device ID', device_id);
+
+    player.getVolume().then(volume => {
+      let volume_percentage = volume * 100;
+      console.log(`The volume of the player is ${volume_percentage}%`);
+    });
+    // Lógica para controlar a reprodução, eventos, etc.
+    const playButton = document.getElementById('playButton');
+    const pauseButton = document.getElementById('pauseButton');
+
+    playButton.addEventListener('click', () => {
+      player.resume().then(() => {
+        console.log('Resumed!');
+      }).catch(error => {
+        console.error('Erro ao retomar a reprodução:', error);
+      });
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      displayResults(data);
-      console.log(data); // Chama a função para exibir os resultados na página
-    } else {
-      console.error('Erro na solicitação:', response.status);
+    pauseButton.addEventListener('click', () => {
+      player.pause().then(() => {
+        console.log('Paused!');
+      }).catch(error => {
+        console.error('Erro ao pausar a reprodução:', error);
+      });
+    });
+  });
+
+  player.connect().then(success => {
+    if (success) {
+      console.log('O player está conectado!');
     }
-  } catch (error) {
-    console.error('Erro na solicitação:', error);
+  }).catch(error => {
+    console.error('Erro ao conectar o player:', error);
+  });
+};
+
+const playTrack = (trackId) => {
+  console.log('Player:', player);
+  console.log('Método play disponível:', player && player.play);
+  console.log('Token de acesso:', accessToken);
+
+  if (player && player.play && accessToken) {
+    player
+      .play({ uris: [`spotify:track:${trackId}`] })
+      .then(() => {
+        console.log('Reprodução iniciada!');
+      })
+      .catch((error) => {
+        console.error('Erro ao iniciar a reprodução:', error);
+      });
+  } else {
+    console.error('Player, método play ou token de acesso não disponíveis.');
   }
 };
 
 const displayResults = (data) => {
   const searchResultsDiv = document.querySelector('.searchResults'); // Obtém a div onde os resultados serão exibidos
 
-  if (data && data.artists && data.artists.items && data.artists.items.length > 0) {
+  if (data && data.tracks && data.tracks.items && data.tracks.items.length > 0) {
     searchResultsDiv.innerHTML = ''; // Limpa a div de resultados
 
-    data.artists.items.forEach(item => {
+    data.tracks.items.forEach(item => {
       const resultItem = document.createElement('a');
       resultItem.textContent = item.name;
       resultItem.href = '#';
       
       resultItem.addEventListener('click', () => {
-        console.log(item.name);
+        playTrack(item.id); // Chama a função para reproduzir a música quando clicada
       });
 
       searchResultsDiv.appendChild(resultItem); // Adiciona o resultado à div de resultados
@@ -668,9 +747,7 @@ const displayResults = (data) => {
 // Chamada inicial para buscar informações do Spotify
 
 
-const getCurrentlyPlaying = async () => {
-  const token = await getClientCredentialsToken(); // Obtém o token de acesso
-
+const getCurrentlyPlaying = async (token) => {
   if (token) {
     const apiUrl = 'https://api.spotify.com/v1/me/player/currently-playing';
     const params = new URLSearchParams({
@@ -695,19 +772,22 @@ const getCurrentlyPlaying = async () => {
       console.error('Erro na solicitação:', error);
     }
   } else {
-    console.error('Não foi possível obter o token de acesso.');
+    console.error('Token de acesso ausente.');
   }
 };
 
+
 // Chamada para buscar a faixa de reprodução atual em múltiplos mercados
 const main = async () => {
-  await getClientCredentialsToken(); // Chama para garantir que o token esteja definido
+  const token = await getClientCredentialsToken(); // Obtém o token de acesso
 
   // Chama as funções após o token ser obtido
-  getCurrentlyPlaying();
-  searchSpotify();
+  if (token) {
+    getCurrentlyPlaying(token);
+    searchSpotify(token, 'sua busca aqui');
+  }
 };
 
 // Chama a função principal
-main();
-});
+main()
+}); 
