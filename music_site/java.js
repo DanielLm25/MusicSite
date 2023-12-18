@@ -500,9 +500,7 @@ const exchangeCodeForToken = async (code) => {
 
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-
-const playTrack = (trackUri) => {
-  const player = new Spotify.Player({
+  player = new Spotify.Player({
     name: 'Nome do Seu App',
     getOAuthToken: cb => { cb(accessToken); }
   });
@@ -514,27 +512,88 @@ const playTrack = (trackUri) => {
   player.connect().then(success => {
     if (success) {
       console.log('O player está conectado!');
-      player.getCurrentState().then(state => {
-        if (!state) {
-          console.error('Não é possível reproduzir no momento');
-          return;
-        }
-        player.play({
-          uris: [trackUri],
-          position_ms: 0, // Posição inicial da reprodução em milissegundos
-        });
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
       });
     }
   }).catch(error => {
     console.error('Erro ao conectar o player:', error);
   });
+};
 
-  player.addListener('ready', ({ device_id }) => {
-    console.log('Ready with Device ID', device_id);
+const playTrack = (trackUri) => {
+  if (!player) {
+    console.error('Player não está inicializado.');
+    return;
+  }
+
+  player.getCurrentState().then(state => {
+    if (!state) {
+      console.error('Não é possível reproduzir no momento');
+      return;
+    }
+    player.play({
+      uris: [trackUri],
+      position_ms: 0, // Posição inicial da reprodução em milissegundos
+    });
   });
 };
+
+
+const displayResults = (data) => {
+  const searchResultsDiv = document.querySelector('.searchResults');
+
+  if (data && data.tracks && data.tracks.items && data.tracks.items.length > 0) {
+    searchResultsDiv.innerHTML = '';
+
+    data.tracks.items.forEach(item => {
+      const resultItem = document.createElement('a');
+      resultItem.textContent = item.name;
+      resultItem.href = '#';
+
+      resultItem.addEventListener('click', (event) => {
+        event.preventDefault();
+        playTrack(item.uri); // Reproduz a música ao clicar no resultado da busca
+      });
+
+      searchResultsDiv.appendChild(resultItem);
+    });
+  } else {
+    searchResultsDiv.innerHTML = '<p>Nenhum resultado encontrado.</p>';
+  }
 };
 
+const searchSpotify = async (searchTerm) => {
+  const token = accessToken;
+
+  if (!token) {
+    console.error('Token de acesso ausente.');
+    return;
+  }
+
+  const apiUrl = 'https://api.spotify.com/v1/search';
+  const query = `q=${encodeURIComponent(searchTerm)}&type=track&market=BR&limit=20`;
+
+  try {
+    const response = await fetch(`${apiUrl}?${query}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Erro na solicitação:', response.status);
+      return;
+    }
+
+    const data = await response.json();
+    displayResults(data); // Chama displayResults com os dados da busca
+    console.log('Resultado da busca:', data);
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+  }
+};
 
 
 const getRecentlyPlayed = async (token) => {
@@ -628,10 +687,8 @@ window.onload = async () => {
   const code = params.get('code');
 
   if (code) {
-    // Se há um código na URL, trocar por token
     await exchangeCodeForToken(code);
   } else {
-    // Se não há código, verificar se já existe um token
     const existingToken = localStorage.getItem('access_token');
     if (existingToken) {
       accessToken = existingToken;
@@ -639,67 +696,13 @@ window.onload = async () => {
       await getTopTracks(accessToken);
       await getPlaylists(accessToken);
 
-
+      // Aqui é onde você chama a função searchSpotify ou outra lógica que deseja executar ao carregar a página com o token.
+      // Por exemplo, vamos supor que você queira buscar uma música específica ao carregar a página.
+      const searchTerm = 'Sua busca dinâmica';
+      await searchSpotify(searchTerm);
     } else {
-      // Se não há token, iniciar a autenticação ao carregar a página
       iniciarAutenticacaoSpotify();
     }
-  }
-};
-
-
-const searchSpotify = async (searchTerm) => {
-  const token = accessToken; // Supondo que 'accessToken' esteja definido em um escopo acessível
-
-  if (!token) {
-    console.error('Token de acesso ausente.');
-    return;
-  }
-
-  const apiUrl = 'https://api.spotify.com/v1/search';
-  const query = `q=${encodeURIComponent(searchTerm)}&type=track&market=BR&limit=20`;
-
-  try {
-    const response = await fetch(`${apiUrl}?${query}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      console.error('Erro na solicitação:', response.status);
-      return;
-    }
-
-    const data = await response.json();
-    displayResults(data);
-    console.log('Resultado da busca:', data);
-  } catch (error) {
-    console.error('Erro na solicitação:', error);
-  }
-};
-
-const displayResults = (data) => {
-  const searchResultsDiv = document.querySelector('.searchResults');
-
-  if (data && data.tracks && data.tracks.items && data.tracks.items.length > 0) {
-    searchResultsDiv.innerHTML = '';
-
-    data.tracks.items.forEach(item => {
-      const resultItem = document.createElement('a');
-      resultItem.textContent = item.name;
-      resultItem.href = '#';
-
-      resultItem.addEventListener('click', (event) => {
-        event.preventDefault();
-        playTrack(item.uri); // Reproduz a música ao clicar no resultado da busca
-      });
-
-      searchResultsDiv.appendChild(resultItem);
-    });
-  } else {
-    searchResultsDiv.innerHTML = '<p>Nenhum resultado encontrado.</p>';
   }
 };
 
@@ -743,7 +746,7 @@ const main = async () => {
     getCurrentlyPlaying(token);
     searchSpotify(token, 'sua busca aqui');
   }
-};window
+};
 // Chama a função principal
 main()
 ; 
