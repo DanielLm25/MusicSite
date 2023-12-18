@@ -483,7 +483,7 @@ const exchangeCodeForToken = async (code) => {
       const data = await response.json();
       const accessToken = data.access_token; // Armazenar o token de acesso
       localStorage.setItem('access_token', accessToken); // Salvar o token no localStorage
-      console.log('Token de acesso obtido:', accessToken);
+      console.log('Token de acesso obtido2:', accessToken);
 
       await getRecentlyPlayed(accessToken);
       await getTopTracks(accessToken);
@@ -499,6 +499,7 @@ const exchangeCodeForToken = async (code) => {
 
 
 
+window.onSpotifyWebPlaybackSDKReady = () => {
 
 const playTrack = (trackUri) => {
   const player = new Spotify.Player({
@@ -531,6 +532,7 @@ const playTrack = (trackUri) => {
   player.addListener('ready', ({ device_id }) => {
     console.log('Ready with Device ID', device_id);
   });
+};
 };
 
 
