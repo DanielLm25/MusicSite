@@ -362,8 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
- 
-
 
 
 let accessToken = null;
@@ -402,7 +400,7 @@ const iniciarAutenticacaoSpotify = async () => {
   const params = {
     response_type: 'code',
     client_id: clientId,
-    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing user-modify-playback-state ',
+    scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private user-read-currently-playing user-modify-playback-state streaming user-read-email user-read-playback-state',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
     redirect_uri: redirectUri,
@@ -497,48 +495,103 @@ const exchangeCodeForToken = async (code) => {
   }
 };
 
-
+let player; // Declare player fora do escopo de window.onSpotifyWebPlaybackSDKReady
 
 window.onSpotifyWebPlaybackSDKReady = () => {
+  const token = 'BQD7PJb2Qs_Ae62t7qkDjYiX7POf9gp2oNXvEcz7rGpr7vtO7NJC6NypwNeBzehrjiy--_JZWDRCK3QlIbjb1lGPS54CnOynWe40MeC0nYANIJM9Snai-AUlS7oP7EX-kiJiU_JGH1-mV3-Px1Hk4pj00tnaAq4pBmvpwvrs4kGtBJa1kVxvV3lPHuWPZ7Ku4xLjQJpaZevWTg';
   player = new Spotify.Player({
-    name: 'Nome do Seu App',
-    getOAuthToken: cb => { cb(accessToken); }
+    name: 'Web Playback SDK Quick Start Player',
+    getOAuthToken: cb => { cb(token); },
+    volume: 0.5
   });
 
-  player.addListener('player_state_changed', state => {
-    console.log('Estado do player alterado', state);
+  player.addListener('ready', ({ device_id }) => {
+    console.log('Ready with Device ID', device_id);
   });
 
-  player.connect().then(success => {
-    if (success) {
-      console.log('O player está conectado!');
-      player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id);
-      });
-    }
-  }).catch(error => {
-    console.error('Erro ao conectar o player:', error);
+  player.connect();
+
+
+  // Not Ready
+  player.addListener('not_ready', ({ device_id }) => {
+    console.log('Device ID has gone offline', device_id);
   });
+  player.addListener('initialization_error', ({ message }) => {
+    console.error(message);
+});
+
+player.addListener('authentication_error', ({ message }) => {
+    console.error(message);
+});
+
+player.addListener('account_error', ({ message }) => {
+    console.error(message);
+});
+player.connect();
+
+document.getElementById('togglePlay').onclick = function() {
+  player.togglePlay();
 };
 
-const playTrack = (trackUri) => {
-  if (!player) {
-    console.error('Player não está inicializado.');
-    return;
+const searchResultsDiv = document.querySelector('.searchResults');
+
+searchResultsDiv.addEventListener('click', async (event) => {
+  event.preventDefault();
+
+  if (event.target.tagName === 'A') {
+    const trackUri = event.target.getAttribute('data-track-uri');
+
+    // Verifica se há um URI de faixa no elemento clicado
+    if (trackUri) {
+      try {
+        const state = await player.getCurrentState();
+
+        if (!state) {
+          console.error('Não é possível reproduzir no momento');
+          return;
+        }
+
+        // Reproduz a faixa clicada
+        player.play({
+          uris: [trackUri],
+          position_ms: 0,
+        });
+      } catch (error) {
+        console.error('Erro ao reproduzir a faixa:', error);
+      }
+    }
   }
+});
+};  
+const searchResultsDiv = document.querySelector('.searchResults');
 
-  player.getCurrentState().then(state => {
-    if (!state) {
-      console.error('Não é possível reproduzir no momento');
-      return;
+searchResultsDiv.addEventListener('click', async (event) => {
+  event.preventDefault();
+
+  if (event.target.tagName === 'A') {
+    const trackUri = event.target.getAttribute('data-track-uri');
+
+    // Verifica se há um URI de faixa no elemento clicado
+    if (trackUri) {
+      try {
+        const state = await player.getCurrentState();
+
+        if (!state) {
+          console.error('Não é possível reproduzir no momento');
+          return;
+        }
+
+        // Reproduz a faixa clicada
+        player.play({
+          uris: [trackUri],
+          position_ms: 0,
+        });
+      } catch (error) {
+        console.error('Erro ao reproduzir a faixa:', error);
+      }
     }
-    player.play({
-      uris: [trackUri],
-      position_ms: 0, // Posição inicial da reprodução em milissegundos
-    });
-  });
-};
-
+  }
+});
 
 const displayResults = (data) => {
   const searchResultsDiv = document.querySelector('.searchResults');
@@ -550,11 +603,7 @@ const displayResults = (data) => {
       const resultItem = document.createElement('a');
       resultItem.textContent = item.name;
       resultItem.href = '#';
-
-      resultItem.addEventListener('click', (event) => {
-        event.preventDefault();
-        playTrack(item.uri); // Reproduz a música ao clicar no resultado da busca
-      });
+      resultItem.setAttribute('data-track-uri', item.uri); // Adiciona o URI da faixa como um atributo
 
       searchResultsDiv.appendChild(resultItem);
     });
@@ -563,6 +612,7 @@ const displayResults = (data) => {
   }
 };
 
+
 const searchSpotify = async (searchTerm) => {
   const token = accessToken;
 
@@ -570,7 +620,6 @@ const searchSpotify = async (searchTerm) => {
     console.error('Token de acesso ausente.');
     return;
   }
-
   const apiUrl = 'https://api.spotify.com/v1/search';
   const query = `q=${encodeURIComponent(searchTerm)}&type=track&market=BR&limit=20`;
 
@@ -748,5 +797,4 @@ const main = async () => {
   }
 };
 // Chama a função principal
-main()
-; 
+main();
