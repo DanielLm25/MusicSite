@@ -197,99 +197,6 @@ heartButton.addEventListener('click', function() {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  var volumeSlider = document.getElementById('volumeSlider');
-  var sliderThumb = document.getElementById('sliderThumb');
-  var sliderFill = document.getElementById('sliderFill');
-  var volumeIcon = document.querySelector('.volumeIcon i');
-
-  // Defina o valor inicial para 50%
-  volumeSlider.value = 50;
-  var percent = volumeSlider.value / 100;
-  setSliderPosition(percent);
-  updateVolumeIcon(percent);
-
-  volumeSlider.addEventListener('mousedown', startDragging);
-
-  function startDragging(e) {
-    e.preventDefault();
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', stopDragging);
-  }
-
-  function stopDragging() {
-    document.removeEventListener('mousemove', drag);
-    document.removeEventListener('mouseup', stopDragging);
-  }
-
-  function drag(e) {
-    var percent = calculatePercent(e);
-    setSliderPosition(percent);
-    updateVolumeIcon(percent);
-
-    // Ajuste o volume do áudio durante o arraste
-    var volumeValue = percent;
-    audioPlayer.volume = volumeValue;
-  }
-
-  function calculatePercent(e) {
-    var sliderRect = volumeSlider.getBoundingClientRect();
-    var offsetX = e.clientX - sliderRect.left;
-    var percent = offsetX / sliderRect.width;
-    return Math.max(0, Math.min(1, percent)); // Garante que percent esteja entre 0 e 1
-  }
-
-  function setSliderPosition(percent) {
-    var thumbPosition = percent * 100;
-    sliderThumb.style.left = thumbPosition + '%';
-
-    // Atualizar o preenchimento da barra
-    sliderFill.style.width = thumbPosition + '%';
-
-    // Atualizar o valor do slider
-    volumeSlider.value = percent * 100;
-  }
-
-  function updateVolumeIcon(percent) {
-    var volumeIconClass = getVolumeIconClass(percent);
-    volumeIcon.className = `bx ${volumeIconClass} volume-icon`;
-  }
-
-  function getVolumeIconClass(percent) {
-    if (percent === 0) {
-      return 'bx bx-volume-mute';
-    } else if (percent > 0 && percent <= 0.5) {
-      return 'bx bx-volume-low';
-    } else {
-      return 'bx bx-volume-full';
-    }
-  }
-
-  // Adicione esta parte para chamar a função toggleMute no clique do ícone do botão
-  volumeIcon.addEventListener('click', toggleMute);
-
-  // Defina isMuted como falso inicialmente
-  var isMuted = false;
-
-  function toggleMute() {
-    isMuted = !isMuted;
-
-    if (isMuted) {
-      volumeSlider.value = 0;
-    } else {
-      volumeSlider.value = 100; // Defina o valor inicial para 50%
-    }
-
-    var percent = volumeSlider.value / 100;
-    setSliderPosition(percent);
-    updateVolumeIcon(percent);
-
-    // Ajuste o volume do áudio ao clicar no ícone de volume
-    var volumeValue = percent;
-    audioPlayer.volume = volumeValue;
-  }
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   const audioPlayer = document.getElementById('audioPlayer');
   const playButton = document.querySelector('.Play');
@@ -495,10 +402,11 @@ const exchangeCodeForToken = async (code) => {
   }
 };
 
-let player; // Declare player fora do escopo de window.onSpotifyWebPlaybackSDKReady
+let player; // Declarar player fora do escopo de window.onSpotifyWebPlaybackSDKReady
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-  const token = 'BQD7PJb2Qs_Ae62t7qkDjYiX7POf9gp2oNXvEcz7rGpr7vtO7NJC6NypwNeBzehrjiy--_JZWDRCK3QlIbjb1lGPS54CnOynWe40MeC0nYANIJM9Snai-AUlS7oP7EX-kiJiU_JGH1-mV3-Px1Hk4pj00tnaAq4pBmvpwvrs4kGtBJa1kVxvV3lPHuWPZ7Ku4xLjQJpaZevWTg';
+  const token = 'BQDsTCKBXfZZ4cSLGQ4w6Xcs3Guk7is54tZge2qVyv_HyRx0dlkPvuRza8Hfz5DNFmrtxEmRXsfeEJBo2wWpbs3yAubIu8R3RZEsaPSx8qro6ncepkL9DoNT5dxncZCq5bJQ2QBLwyF9KCVm3jM2VABUuHAFEfuxAMbblage67gDIMkqu8x3IJxE3StxiDutB9c5euQfDX_Q7w';
+
   player = new Spotify.Player({
     name: 'Web Playback SDK Quick Start Player',
     getOAuthToken: cb => { cb(token); },
@@ -507,62 +415,110 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   player.addListener('ready', ({ device_id }) => {
     console.log('Ready with Device ID', device_id);
+
+    // Encontrar o botão de reprodução após o player estar pronto
+    const playButton = document.querySelector('.Play');
+
+    // Adicionar um evento de clique ao botão de reprodução
+    playButton.addEventListener('click', function() {
+      // Reproduzir ou pausar a música
+      player.togglePlay().then(() => {
+        console.log('Toggled playback');
+      }).catch(error => {
+        console.error('Erro ao reproduzir/pausar:', error);
+      });
+    });
   });
 
-  player.connect();
-
-
-  // Not Ready
   player.addListener('not_ready', ({ device_id }) => {
     console.log('Device ID has gone offline', device_id);
   });
+
   player.addListener('initialization_error', ({ message }) => {
     console.error(message);
-});
+  });
 
-player.addListener('authentication_error', ({ message }) => {
+  player.addListener('authentication_error', ({ message }) => {
     console.error(message);
-});
+  });
 
-player.addListener('account_error', ({ message }) => {
+  player.addListener('account_error', ({ message }) => {
     console.error(message);
-});
-player.connect();
+  });
 
-document.getElementById('togglePlay').onclick = function() {
-  player.togglePlay();
+  player.connect();
 };
 
-const searchResultsDiv = document.querySelector('.searchResults');
+document.addEventListener('DOMContentLoaded', function () {
+  const backButton = document.querySelector('.Back');
+  const nextButton = document.querySelector('.Next');
 
-searchResultsDiv.addEventListener('click', async (event) => {
-  event.preventDefault();
-
-  if (event.target.tagName === 'A') {
-    const trackUri = event.target.getAttribute('data-track-uri');
-
-    // Verifica se há um URI de faixa no elemento clicado
-    if (trackUri) {
-      try {
-        const state = await player.getCurrentState();
-
-        if (!state) {
-          console.error('Não é possível reproduzir no momento');
-          return;
-        }
-
-        // Reproduz a faixa clicada
-        player.play({
-          uris: [trackUri],
-          position_ms: 0,
-        });
-      } catch (error) {
-        console.error('Erro ao reproduzir a faixa:', error);
-      }
+  backButton.addEventListener('click', function () {
+    if (player) {
+      player.previousTrack().then(() => {
+        console.log('Voltou para a faixa anterior!');
+      }).catch(error => {
+        console.error('Erro ao voltar para a faixa anterior:', error);
+      });
     }
-  }
+  });
+
+  nextButton.addEventListener('click', function () {
+    if (player) {
+      player.nextTrack().then(() => {
+        console.log('Passou para a próxima faixa!');
+      }).catch(error => {
+        console.error('Erro ao passar para a próxima faixa:', error);
+      });
+    }
+  });
 });
-};  
+
+document.addEventListener('DOMContentLoaded', function () {
+  const volumeSlider = document.querySelector('.volume-slider');
+  const muteButton = document.querySelector('.mute-button');
+
+  // Associar controle de volume ao player do Spotify
+  volumeSlider.addEventListener('input', function () {
+    const percent = volumeSlider.value / 100;
+    
+    if (player) {
+      player.setVolume(percent).then(() => {
+        console.log('Volume atualizado para:', percent * 100);
+      }).catch(error => {
+        console.error('Erro ao definir o volume:', error);
+      });
+    }
+  });
+
+  muteButton.addEventListener('click', function () {
+    if (player) {
+      player.getVolume().then(currentVolume => {
+        if (currentVolume > 0) {
+          player.setVolume(0).then(() => {
+            console.log('Mudo');
+            volumeSlider.value = 0;
+          }).catch(error => {
+            console.error('Erro ao definir mudo:', error);
+          });
+        } else {
+          // Obtenha o último volume antes do mudo e defina o volume de volta
+          player.setVolume(0.5).then(() => {
+            console.log('Volume restaurado');
+            volumeSlider.value = 50;
+          }).catch(error => {
+            console.error('Erro ao restaurar volume:', error);
+          });
+        }
+      }).catch(error => {
+        console.error('Erro ao obter o volume:', error);
+      });
+    }
+  });
+
+
+
+
 const searchResultsDiv = document.querySelector('.searchResults');
 
 searchResultsDiv.addEventListener('click', async (event) => {
@@ -797,4 +753,4 @@ const main = async () => {
   }
 };
 // Chama a função principal
-main();
+main();});

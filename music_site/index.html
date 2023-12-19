@@ -53,10 +53,6 @@
         <i class='bx bx-search search'></i>
         <input class="inputSearch" type="text" placeholder="Pesquise sua música">
         <div class="searchResults"></div>
-        <button id="togglePlay">Toggle Play</button>
-
-
-        
       </div>
     </div>
      
@@ -130,15 +126,12 @@
       </ul>
     </div>
     <div class="center-section">
-      <audio id="audioPlayer" class="audioPlayer">
-        <source src="music/Legends Never Die (ft. Against The Current) _ Worlds 2017 - League of Legends_r6zIGXun57U.mp3" type="audio/mp3">
-      </audio>
       <div class="MainPlayerContainer">
         <div class="PrincipalPlayer">
           <button class="Random"><i class='bx bx-shuffle random'></i></button>
-          <button class="Back"><i class='bx bxs-chevron-left-circle back'></i></button>
+          <button class="Back">Anterior</button>
           <button class="Play"><i class='bx bx-play-circle play'></i></button>
-          <button class="Next"><i class='bx bxs-chevron-right-circle next'></i></button>
+          <button class="Next">Próximo</button>
           <button class="Looping"> <i class='bx bx-sync lopping'></i></button>
         </div>
         <div class="playBar">
@@ -151,14 +144,9 @@
       </div>
     </div>
     <div class="right-section">
-      <div class="volumeContainer">
-        <button class="volumeIcon"><i class='bx bx-volume-low'></i></button>
-        <div class="slider-container">
-          <div class="custom-slider" id="volumeSlider">
-            <div class="slider-fill" id="sliderFill"></div>
-            <div class="slider-thumb" id="sliderThumb"></div>
-          </div>
-        </div>
+      <div class="volume-control">
+        <input type="range" min="0" max="100" value="50" class="volume-slider">
+        <button class="mute-button">Mudo</button>
       </div>
     </div>
   </div>
