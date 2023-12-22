@@ -271,6 +271,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let accessToken = null;
 const clientId = 'f3e70e3bf6a343008d27a1272470b523';
 const redirectUri = 'http://127.0.0.1:5500/music_site/index.html';
@@ -358,6 +373,171 @@ const getClientCredentialsToken = async () => {
   return accessToken; // Retorna o token de acesso existente ou recém-obtido
 };
 
+const getRecentlyPlayed = async (token) => {
+  const apiUrl = 'https://api.spotify.com/v1/me/player/recently-played?limit=8';
+  const container = document.getElementById('recentlyPlayedTracksContainer');
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const tracks = data.items; // Obtém as músicas recentemente tocadas
+
+      // Limpa o conteúdo anterior da div
+      container.innerHTML = '';
+
+      // Para cada música, adiciona a imagem à div
+      tracks.forEach((track) => {
+        const imageUrl = track.track.album.images[0].url; // Obtém a URL da imagem da música
+
+        // Cria um elemento de imagem e define o atributo src como a URL da imagem
+        const imageElement = document.createElement('img');
+        imageElement.src = imageUrl;
+
+        // Adiciona a imagem à div recentlyPlayedTracksContainer
+        container.appendChild(imageElement);
+      });
+    } else {
+      console.error('Erro na solicitação:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação:', error);
+  }
+};
+
+
+
+const getTopTracks = async (token) => {
+  const apiUrl = 'https://api.spotify.com/v1/me/top/tracks?limit=5';
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Resposta de getTopTracks:', data); // Exibir os dados da resposta da API
+
+      // Acesso às faixas principais
+      const topTracks = data.items;
+
+      // Acesso ao contêiner onde você deseja adicionar as imagens
+      const topTracksList = document.querySelector('.topTracksList');
+
+      // Para cada faixa principal, crie um item na lista com a imagem, título e artista
+      topTracks.forEach((track) => {
+        // Obtendo a URL da imagem da faixa
+        const imageUrl = track.album.images[0].url; // Pode ser necessário verificar se há imagens disponíveis
+        const trackName = track.name;
+        const artistName = track.artists[0].name;
+
+        // Criando elementos HTML para cada faixa
+        const trackItem = document.createElement('li');
+        trackItem.classList.add('topTrackItem');
+
+        const imageElement = document.createElement('img');
+        imageElement.classList.add('trackImage');
+        imageElement.src = imageUrl;
+        imageElement.alt = 'Capa do Álbum';
+
+        const trackInfo = document.createElement('div');
+        trackInfo.classList.add('trackInfo');
+
+        const trackTitle = document.createElement('p');
+        trackTitle.classList.add('trackTitle');
+        trackTitle.textContent = trackName;
+
+        const trackArtist = document.createElement('p');
+        trackArtist.classList.add('trackArtist');
+        trackArtist.textContent = artistName;
+
+        // Adicionando os elementos ao item da lista
+        trackInfo.appendChild(trackTitle);
+        trackInfo.appendChild(trackArtist);
+
+        trackItem.appendChild(imageElement);
+        trackItem.appendChild(trackInfo);
+
+        // Adicionando o item da lista ao contêiner principal
+        topTracksList.appendChild(trackItem);
+      });
+    } else {
+      console.error('Erro na solicitação de getTopTracks:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação de getTopTracks:', error);
+  }
+};
+
+const getPlaylists = async (token) => {
+  const apiUrl = 'https://api.spotify.com/v1/me/playlists?limit=3&offset=0';
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Resposta de getPlaylists:', data); // Exibir os dados da resposta da API
+
+      // Acesso às playlists
+      const playlists = data.items;
+
+      // Acesso ao contêiner onde você deseja adicionar as playlists
+      const playlistList = document.querySelector('.playlistList');
+
+      // Para cada playlist, crie um item na lista com a imagem, título e artista
+      playlists.forEach((playlist) => {
+        // Obtendo a URL da imagem da playlist (se disponível)
+        const imageUrl = playlist.images.length > 0 ? playlist.images[0].url : 'URL_DEFAULT'; // Substitua 'URL_DEFAULT' pela URL da imagem padrão, se necessário
+
+        // Criando elementos HTML para cada playlist
+        const playlistItem = document.createElement('li');
+        playlistItem.classList.add('playlistItem');
+
+        const playlistImage = document.createElement('img');
+        playlistImage.src = imageUrl;
+        playlistImage.alt = 'Playlist Image'; // Definindo o atributo alt
+
+        const playlistTitle = document.createElement('p');
+        playlistTitle.classList.add('playlistTitle');
+        playlistTitle.textContent = playlist.name; // Definindo o título da playlist
+
+        const playlistArtist = document.createElement('p');
+        playlistArtist.classList.add('playlistArtist');
+
+        // Adicionando os elementos à estrutura HTML
+        playlistItem.appendChild(playlistImage);
+        playlistItem.appendChild(playlistTitle);
+
+        // Adicionando o item da playlist à lista principal
+        playlistList.appendChild(playlistItem);
+      });
+    } else {
+      console.error('Erro na solicitação de getPlaylists:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro na solicitação de getPlaylists:', error);
+  }
+}; 
+
+
+
+
 
 const exchangeCodeForToken = async (code) => {
   const codeVerifier = window.localStorage.getItem('code_verifier');
@@ -405,12 +585,41 @@ const exchangeCodeForToken = async (code) => {
 let player; // Declarar player fora do escopo de window.onSpotifyWebPlaybackSDKReady
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-  const token = 'BQDsTCKBXfZZ4cSLGQ4w6Xcs3Guk7is54tZge2qVyv_HyRx0dlkPvuRza8Hfz5DNFmrtxEmRXsfeEJBo2wWpbs3yAubIu8R3RZEsaPSx8qro6ncepkL9DoNT5dxncZCq5bJQ2QBLwyF9KCVm3jM2VABUuHAFEfuxAMbblage67gDIMkqu8x3IJxE3StxiDutB9c5euQfDX_Q7w';
+  const token = 'BQDYAeoK-yxtfOXM8CASQrMxVY1JUpX-0xVwHJtScS7DLRvSk3u_SgiRxvhKmXYFgnInOMfK962-_CdYv69nnAi4jXduTP9RUjJ6MvxbBYCW4021WRViCbszLa4u0KvGb-CcFcUbkwW5yMgVqFZ-U3R_fPSHF0Q6VFT5fai9YM6fdaW3oApvws2YsgU0nXBE-oqAp9GrmBuKLw';
 
   player = new Spotify.Player({
     name: 'Web Playback SDK Quick Start Player',
     getOAuthToken: cb => { cb(token); },
     volume: 0.5
+  });
+
+  player.addListener('player_state_changed', state => {
+    if (state) {
+      const currentTrack = state.track_window.current_track;
+      const trackName = currentTrack.name;
+      const artistName = currentTrack.artists[0].name;
+      const albumImageUrl = currentTrack.album.images[0].url; // URL da imagem do álbum
+
+      // Selecionando a UL onde vamos adicionar as informações
+      const playPList = document.querySelector('.playP');
+
+      // Criando os elementos para a imagem do álbum e as informações da música
+      const albumImage = document.createElement('img');
+      albumImage.src = albumImageUrl;
+      albumImage.alt = 'Capa do álbum';
+
+      const trackInfo = document.createElement('li');
+      trackInfo.classList.add('playPr');
+      trackInfo.innerHTML = `
+        <p class="PlayPre">${trackName}</p>
+        <p class="playPres">${artistName}</p>
+      `;
+
+      // Adicionando os elementos criados à UL
+      playPList.innerHTML = ''; // Limpa o conteúdo anterior, se houver
+      playPList.appendChild(albumImage);
+      playPList.appendChild(trackInfo);
+    }
   });
 
   player.addListener('ready', ({ device_id }) => {
@@ -428,6 +637,19 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         console.error('Erro ao reproduzir/pausar:', error);
       });
     });
+  });
+
+  player.addListener('player_state_changed', state => {
+    const playButton = document.querySelector('.Play');
+    if (state) {
+      if (state.paused) {
+        // Mude o ícone para o ícone de reproduzir
+        playButton.innerHTML = '<i class="bx bx-play"></i>';
+      } else {
+        // Mude o ícone para o ícone de pausar
+        playButton.innerHTML = '<i class="bx bx-pause"></i>';
+      }
+    }
   });
 
   player.addListener('not_ready', ({ device_id }) => {
@@ -477,78 +699,48 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   const volumeSlider = document.querySelector('.volume-slider');
   const muteButton = document.querySelector('.mute-button');
+  let isMuted = false;
 
-  // Associar controle de volume ao player do Spotify
-  volumeSlider.addEventListener('input', function () {
-    const percent = volumeSlider.value / 100;
-    
-    if (player) {
-      player.setVolume(percent).then(() => {
-        console.log('Volume atualizado para:', percent * 100);
-      }).catch(error => {
-        console.error('Erro ao definir o volume:', error);
-      });
+  // Função para atualizar o ícone do botão
+  const updateMuteIcon = () => {
+    if (isMuted) {
+      muteButton.innerHTML = '<i class="bx bx-volume-mute"></i>';
+    } else {
+      muteButton.innerHTML = '<i class="bx bx-volume-full"></i>';
     }
-  });
+  };
 
-  muteButton.addEventListener('click', function () {
-    if (player) {
-      player.getVolume().then(currentVolume => {
-        if (currentVolume > 0) {
-          player.setVolume(0).then(() => {
-            console.log('Mudo');
-            volumeSlider.value = 0;
-          }).catch(error => {
-            console.error('Erro ao definir mudo:', error);
-          });
-        } else {
-          // Obtenha o último volume antes do mudo e defina o volume de volta
-          player.setVolume(0.5).then(() => {
-            console.log('Volume restaurado');
-            volumeSlider.value = 50;
-          }).catch(error => {
-            console.error('Erro ao restaurar volume:', error);
-          });
-        }
-      }).catch(error => {
-        console.error('Erro ao obter o volume:', error);
-      });
-    }
-  });
-
-
-
-
-const searchResultsDiv = document.querySelector('.searchResults');
-
-searchResultsDiv.addEventListener('click', async (event) => {
-  event.preventDefault();
-
-  if (event.target.tagName === 'A') {
-    const trackUri = event.target.getAttribute('data-track-uri');
-
-    // Verifica se há um URI de faixa no elemento clicado
-    if (trackUri) {
-      try {
-        const state = await player.getCurrentState();
-
-        if (!state) {
-          console.error('Não é possível reproduzir no momento');
-          return;
-        }
-
-        // Reproduz a faixa clicada
-        player.play({
-          uris: [trackUri],
-          position_ms: 0,
+  // Função para alternar entre mudo e volume normal
+  const toggleMute = () => {
+    if (player) { // Certifique-se de que 'player' seja a instância do Spotify Web Playback SDK
+      if (!isMuted) {
+        player.setVolume(0).then(() => {
+          console.log('Mudo');
+          volumeSlider.value = 0;
+          isMuted = true;
+          updateMuteIcon();
+        }).catch(error => {
+          console.error('Erro ao definir mudo:', error);
         });
-      } catch (error) {
-        console.error('Erro ao reproduzir a faixa:', error);
+      } else {
+        player.setVolume(0.5).then(() => {
+          console.log('Volume restaurado');
+          volumeSlider.value = 50;
+          isMuted = false;
+          updateMuteIcon();
+        }).catch(error => {
+          console.error('Erro ao restaurar volume:', error);
+        });
       }
     }
-  }
-});
+  };
 
+  // Associar evento de clique para alternar entre mudo e volume normal
+  muteButton.addEventListener('click', toggleMute);
+
+  // Inicializar o ícone do botão no início da página
+  updateMuteIcon();
+});
 const displayResults = (data) => {
   const searchResultsDiv = document.querySelector('.searchResults');
 
@@ -601,83 +793,6 @@ const searchSpotify = async (searchTerm) => {
 };
 
 
-const getRecentlyPlayed = async (token) => {
-  const apiUrl = 'https://api.spotify.com/v1/me/player/recently-played';
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data); // Lidar com os dados das músicas recentemente tocadas
-    } else {
-      console.error('Erro na solicitação:', response.status);
-    }
-  } catch (error) {
-    console.error('Erro na solicitação:', error);
-  }
-};
-
-const getTopTracks = async (token) => {
-  const apiUrl = 'https://api.spotify.com/v1/me/top/tracks?limit=5';
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Resposta de getTopTracks:', data); // Exibir os dados da resposta da API
-    } else {
-      console.error('Erro na solicitação de getTopTracks:', response.status);
-    }
-  } catch (error) {
-    console.error('Erro na solicitação de getTopTracks:', error);
-  }
-};
-
-
-const getPlaylists = async (token) => {
-  const apiUrl = 'https://api.spotify.com/v1/me/playlists?limit=3&offset=0';
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Resposta de getPlaylists:', data); // Exibir os dados da resposta da API
-    } else {
-      console.error('Erro na solicitação de getPlaylists:', response.status);
-    }
-  } catch (error) {
-    console.error('Erro na solicitação de getPlaylists:', error);
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
 const iniciarAutenticacao = () => {
   iniciarAutenticacaoSpotify();
 };
@@ -712,34 +827,7 @@ window.onload = async () => {
 };
 
 
-const getCurrentlyPlaying = async (token) => {
-  if (token) {
-    const apiUrl = 'https://api.spotify.com/v1/me/player/currently-playing';
-    const params = new URLSearchParams({
-      market: 'BR,US', // Adicione os mercados desejados separados por vírgula
-    });
 
-    try {
-      const response = await fetch(`${apiUrl}?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data); // Lidar com os dados da resposta da API
-      } else {
-        console.error('Erro na solicitação:', response.status);
-      }
-    } catch (error) {
-      console.error('Erro na solicitação:', error);
-    }
-  } else {
-    console.error('Token de acesso ausente.');
-  }
-};
 
 
 // Chamada para buscar a faixa de reprodução atual em múltiplos mercados
@@ -748,9 +836,8 @@ const main = async () => {
 
   // Chama as funções após o token ser obtido
   if (token) {
-    getCurrentlyPlaying(token);
     searchSpotify(token, 'sua busca aqui');
   }
 };
 // Chama a função principal
-main();});
+main();

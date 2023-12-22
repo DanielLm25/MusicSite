@@ -226,13 +226,26 @@ i {
   }
 
   /*-------------------------------------------------------TOP BAR----------------------------------------------------------------------*/
+  #authButton {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  #authButton i {
+    font-size: 24px;
+    margin-right: 5px; /* Ajuste a margem conforme necessário */
+  }
 
   .searchBar {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     height: 60px;
-    margin-left: 100px;
+    margin-left: 18px;
   }
   
   .inputBar {
@@ -250,6 +263,34 @@ i {
     color: #ffffff;
     padding-left: 30px; 
   }
+
+  .searchResults {
+    position: absolute;
+    width: 100%;
+    height: 205px; /* Ajuste conforme necessário */
+    overflow-x:hidden;
+    background-image: linear-gradient(to right, rgb(43, 46, 96), rgb(3, 4, 34));
+    color: #0055ff;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);    
+    display: none;   
+    border-radius: 2%;
+  }
+
+  .searchResultItem {
+    color: #0055ff;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  .searchResultItem:hover {
+    cursor: pointer;
+    background-color: #f0f0f0;
+  }
+  
+  .searchResultItem:active {
+    background-color: #d0d0d0;
+  }
+
   
   .inputSearch::placeholder {
     color: #ffffff;
@@ -404,6 +445,7 @@ i {
 
   .recentlyPlays{
     padding-left: 310px;
+    padding-top: 5px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
@@ -426,6 +468,7 @@ i {
   .recentlyPlaysTop{
     display: flex;
     width: 100%;
+    height: 50px;
     justify-content: space-between;
     align-items: center;
   }
@@ -439,10 +482,13 @@ i {
   }
 
 
-  img{
-    height: 150px;
+  .recentlyPlays img {
+    height: 130px;
     border-radius: 8px;
+    margin-right: 20px; /* Aplica margem a todas as imagens */
   }
+
+  
 
   .musicTitle{
     font-size: 15px;
@@ -456,42 +502,54 @@ i {
   }
 
 
+    /*-------------------------------------------------------MUSICONTAINER----------------------------------------------------------------------*/
 
 
-  /*-------------------------------------------------------TRENDINGS----------------------------------------------------------------------*/
-
-
-
-  .Trendings{
-    background-image: linear-gradient(to right, rgba(36, 42, 156, 0), rgba(6, 9, 95, 0));   
-    padding-left: 310px;
-    list-style: none;
-    display: inline-block;
-    flex-direction: column;
-    width: 800px;
-    height: 335px;
-    
-  }
-
-  .Trendings h1{
-    margin: 0%;
-    font-size: 25px;
-     padding: 5px;
-  }    
-
-  .TrendingsList{
+  .musicContainer {
     display: flex;
-    align-items: center;
-    width: auto;
+    flex-wrap: wrap;
+    margin-top: 10px;
   }
 
-  .TrendingsList img{
+  /*-------------------------------------------------------Top tracks----------------------------------------------------------------------*/
+  .topTracks {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .topTracks h1{
+    background-image: linear-gradient(to right, rgba(36, 42, 156, 0), rgba(6, 9, 95, 0));
+    list-style: none;
+    width: 750px;
+    margin: 0%; /* Adicionando margem na parte inferior para separar os elementos */
+    padding: 0;
+    margin-bottom: 5px;
+    font-size: 25px;
+  }
+  
+  .topTracksList {
+    list-style: none;
+    padding: 0;
+    margin-left: 42%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .topTrackItem{
+    display: flex;
+    padding: 5px;
+  }
+
+  .topTrackItem img{
     height: 60px;
     width: 60px;  
-    padding: 5px;
-}
+    padding: 0px;
+    border-radius: 50%;
+  }
 
-.TrendingsList p{
+.topTrackItem p{
   display: flex;
   margin: 4px;
   margin-left: 10px;
@@ -499,10 +557,6 @@ i {
   color: #fff;
 }
 
-.trendingItems{
-  display: flex;
-  flex-direction: column;
-}
 .time{
   align-self: flex-end;
   margin-top: 5px;
@@ -533,56 +587,43 @@ i {
 
 
   /*-------------------------------------------------------TOP PLAYLIST----------------------------------------------------------------------*/
+  
+  .TopPlaylists h1{
+    margin: 10px 0px 10px;
+    margin-left:5%;
+    padding: 0%;
+    font-size: 25px;
+  }
+
+  .TopPlaylists ul{
+    margin-left:5%;
+    list-style: none;
+    display: flex;
+  }
 
 
-.TopPlaylist {
-  display: inline-block;
-  vertical-align: top;
-  margin-left: 20px;
-  height: auto;
-}
-
-.TopPlaylist h1 {
-  color: #ffffff;
-  margin: 10px;
-  margin-left: 0;
-  padding: 0;
-  padding-bottom: 5px;
-  font-size: 25px;
-}
-
-.musicTop {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
+.playlistTitle {
+  overflow: hidden;
+  white-space: normal; /* Permitir quebra de linha */
+  width: 170px; /* Ajustar conforme necessário */
   margin: 0;
-  padding: 0;
-  height: 200px;
-}
-.topItems {
-  color: #fdfdfd;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  font-size: 20px;
-  margin-top: 10px;
-  height: 300px; 
-}
+  margin-left: 20%;
+  font-size: 23px;
+  color: #f0f0f0;
+  text-align: center;
 
-.topItems img{
-  height: 200px; 
-}
 
-.playlistG{
-  color: rgba(209, 209, 209, 0.996);;
 }
 
 
-
+.TopPlaylists img{
+  border-radius: 15%;
+  width: 240px;
+  height: 240px;
+  padding: 15px;
+}
 
   /*-------------------------------------------------------PLAYER (IMG)----------------------------------------------------------------------*/
-
-
   .Player {
     position: fixed;
     bottom: 0;
@@ -591,7 +632,7 @@ i {
     background-image: linear-gradient(to right, rgba(42, 43, 68, 0.99), rgba(0, 2, 48, 0.995));
     color: #a8a6a6;
     display: flex;
-    padding-left: 210px;
+    padding-left: 95px;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
@@ -602,28 +643,40 @@ i {
   
   .playP {
     display: flex;
-    align-items: center;
+    width: 450px;
     list-style: none;
-    margin-right: 80px;
   }
   
   .playP img {
-    width: 60px;
-    height: 60px;
-    margin-right: 10px;
+    width: 65px;
+    height: 65px;
+    margin-left: 110px;
+    border-radius: 20%;
+    
   }
   
   .playPr,
   .PlayPre {
-    font-size: 16px;
+    font-size: 17px;
+    width: 400px;
     font-weight: bold;
+    margin-left: 5px;
+    padding-top: 5px;
   }
   
   .PlayPre {
     color: #fdfdfd;
   }
+
+  .playPres {
+    font-size: 15px;
+    width: 100%;
+    font-weight: bold;
+    margin-left: 5px;
+  }
   
   .heart{
+    cursor: pointer;
     background-color: transparent;
     position: relative;
     width: 40px; 
@@ -657,7 +710,7 @@ i {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 80px;
+    padding-right: 35px;
   }
   
   .PrincipalPlayer {
@@ -707,22 +760,31 @@ i {
   /*-------------------------------------------------------PLAYER (VOLUME)----------------------------------------------------------------------*/
 
 
-  .volumeContainer {
+
+  
+  .volume-control {
     display: flex;
     align-items: center;
+    padding-right: 25px;
+    
   }
   
-  .volumeIcon {
-    background-color:transparent; 
+  .mute-button {
+    position: relative;
+    background-color: transparent;
     border: none;
     border-radius: 50%;
-    padding: 5px;
     cursor: pointer;
+    width: 40px; /* Ajuste o tamanho do botão conforme necessário */
+    height: 40px; /* Ajuste o tamanho do botão conforme necessário */
   }
-
-  .volumeIcon i{
+  
+  .mute-button i {
     font-size: 25px;
-    transform: translate(15px);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   
   
@@ -760,29 +822,5 @@ i {
   
 
 
-  .searchResults {
-    position: absolute;
-    width: 100%;
-    height: 200px; /* Ajuste conforme necessário */
-    overflow-x:hidden;
-    background-color:transparent;
-    color: #0055ff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: none;    }
-
-  .searchResultItem {
-    color: #0055ff;
-    padding: 5px;
-    cursor: pointer;
-  }
-  
-  .searchResultItem:hover {
-    cursor: pointer;
-    background-color: #f0f0f0;
-  }
-  
-  .searchResultItem:active {
-    background-color: #d0d0d0;
-  }
-
+ 
   

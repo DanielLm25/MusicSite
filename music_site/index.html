@@ -58,7 +58,7 @@
      
 
     
-      <button id="authButton">Autenticar com o Spotify</button>
+      <button id="authButton"><i class='bx bxl-spotify'></i></button>
       <div class="containerButton">
       <button id="toggleMenu">
         <i class='bx bx-chevron-down chevron' id="chevronIcon"></i>
@@ -76,6 +76,8 @@
   </div>
 </div>
 
+
+<div class="musicContainer">
 <div class="recentlyPlays" id="recentlyPlaysContainer">
   <div class="recentlyPlaysTop">
       <h1 class="recentlyPlaysTitle">Recently Plays</h1>
@@ -84,31 +86,20 @@
   <div class="recentlyPlayedTracks" id="recentlyPlayedTracksContainer"></div>
 </div>
 
-<div class="Trendings">
-  <h1 class="TrendingTitle">Trending</h1>
-  <ul class="TrendingsList">
-    <img src="img/download.jpeg" alt="imagem de Tranding">
-    <li class="trendingItems">
-      <p class="trendingMusicTitle">Classical</p>
-      <p class="trendingMusicGenre">Tarrega</p>
-    </li>
-    <div class="playTrandings">
-    <p class="time">3:29</p>
-    <button class="playTranding" ><i class='bx bx-play-circle playT'></i></button>
-  </div>
+<div class="topTracks">
+  <h1>Top Tracks</h1>
+  <ul class="topTracksList">
   </ul>
 </div>
 
-<div class="TopPlaylist">
+<div class="TopPlaylists">
   <h1>Top Playlists for you</h1>
-  <div class="musicTop">
-    <div class="topItems">
-      <img src="img/ab67616d0000b273f8fa082806184fcb032d8e0a.jpeg" alt="imagem de Recently Plays">
-    <p class="playlistM">Warriors</p>
-    <p class="playlistG">Imagine Dragons</p>
-  </div>
-  </div>
+  <ul class="playlistList">
+    <li class="playlistItem">
+    </li>
+  </ul>
 </div>
+
 
 <footer> 
   <div class="Player">
@@ -128,11 +119,9 @@
     <div class="center-section">
       <div class="MainPlayerContainer">
         <div class="PrincipalPlayer">
-          <button class="Random"><i class='bx bx-shuffle random'></i></button>
-          <button class="Back">Anterior</button>
+          <button class="Back"><i class='bx bxs-rewind-circle'></i></button>
           <button class="Play"><i class='bx bx-play-circle play'></i></button>
-          <button class="Next">Próximo</button>
-          <button class="Looping"> <i class='bx bx-sync lopping'></i></button>
+          <button class="Next"><i class='bx bxs-fast-forward-circle' ></i></button>
         </div>
         <div class="playBar">
           <span id="currentTime">0:00</span>
@@ -145,8 +134,8 @@
     </div>
     <div class="right-section">
       <div class="volume-control">
+        <button class="mute-button"><i class='bx bx-volume-mute' ></i></button>
         <input type="range" min="0" max="100" value="50" class="volume-slider">
-        <button class="mute-button">Mudo</button>
       </div>
     </div>
   </div>
